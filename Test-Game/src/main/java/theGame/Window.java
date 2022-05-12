@@ -14,9 +14,19 @@ import javax.swing.JFrame;
  * @author Rok
  */
 public class Window {
-
+    private final int width;
+    private final int height;
+    private final String title;
+    private final Game game;
 
     public Window(int width, int height, String title, Game game) {
+        this.width = width;
+        this.height = height;
+        this.title = title;
+        this.game = game;
+    }
+
+    public void start() {
         
         JFrame frame = new JFrame(title);
         
@@ -29,11 +39,5 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
     }
-    
-   
-    
-    
-    
 }
