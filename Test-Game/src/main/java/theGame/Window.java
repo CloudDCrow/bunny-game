@@ -14,8 +14,7 @@ import javax.swing.JFrame;
  * @author Rok
  */
 public class Window {
-    private final int width;
-    private final int height;
+    private final int width, height;
     private final String title;
     private final Game game;
 
