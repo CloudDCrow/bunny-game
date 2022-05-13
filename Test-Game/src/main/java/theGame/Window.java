@@ -8,6 +8,7 @@ public class Window {
     private final int width, height;
     private final String title;
     private final Game game;
+    private JFrame frame;
 
     public Window(int width, int height, String title, Game game) {
         this.width = width;
@@ -18,7 +19,7 @@ public class Window {
 
     public void start() {
         
-        JFrame frame = new JFrame(title);
+        this.frame = new JFrame(title);
         
         frame.setPreferredSize(new Dimension(width, height));
         frame.setMaximumSize(new Dimension(width, height));

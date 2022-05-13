@@ -17,6 +17,9 @@ public class Player extends GameObject{
         x += velX;
         y += velY;
         
+        //Players movements
+/////////////////////////////////////////
+        
         if(handler.isUp()) {
             velY = -5;
         } else if(!handler.isDown()) {
@@ -40,6 +43,9 @@ public class Player extends GameObject{
         }else if(!handler.isLeft()){
             velX = 0;
         }
+        
+/////////////////////////////////////////
+
     }
 
     public void render(Graphics g) {

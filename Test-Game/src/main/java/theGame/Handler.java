@@ -1,8 +1,7 @@
-
 package theGame;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class Handler {
@@ -15,15 +14,20 @@ public class Handler {
                     right = false;
     
     public void tick() {
-        for(GameObject obj: this.object) {
-            obj.tick();
-        }
+    	for(int i = 0; i < this.object.size(); i++) {
+    		GameObject obj = this.object.get(i);
+    		obj.tick();
+    	}
     }    
     
     public void render(Graphics g) {
-        for(GameObject obj: this.object) {
+        /*for(GameObject obj: this.object) {
             obj.render(g);
-        }
+        } */
+    	for(int i = 0; i < this.object.size(); i++) {
+    		GameObject obj = this.object.get(i);
+    		obj.render(g);
+    	}
     }
     
     public void addObject(GameObject tempObject) {
@@ -35,7 +39,8 @@ public class Handler {
     }
 
     //Movement Getters and Setters
-    /////////////////////////////////////
+////////////////////////////////////////////
+    
     public boolean isUp() {
         return up;
     }
@@ -67,5 +72,7 @@ public class Handler {
     public void setRight(boolean right) {
         this.right = right;
     }
-    ////////////////////////////////////////
+    
+////////////////////////////////////////////
+    
 }

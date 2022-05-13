@@ -3,6 +3,7 @@ package theGame;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.logging.*;
 
 
@@ -11,6 +12,7 @@ public class Game extends Canvas implements Runnable{
     private boolean isRunning = false;
     private Thread thread;
     private Handler handler;
+    private BufferedImage level = null;
     
     public Game() {
         Window window = new Window(1000, 563, "Test Game", this);
@@ -20,7 +22,10 @@ public class Game extends Canvas implements Runnable{
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
         
-        handler.addObject(new Player(100, 100, ID.Player, handler));
+        BufferedImageLoader loader = new BufferedImageLoader();
+        this.level = loader.loadImage("/test-level.png");
+        
+        this.LoadLevel(level);
     }
     
     private void start() {
@@ -39,6 +44,8 @@ public class Game extends Canvas implements Runnable{
     }
     
     //Game loop
+/////////////////////////////////////////////
+    
     @Override
     public void run() {
         this.requestFocus();
@@ -67,13 +74,15 @@ public class Game extends Canvas implements Runnable{
           }
          }
          stop();    
-    }
+    }  
+    
+/////////////////////////////////////////////
     
     public void tick() {
         handler.tick();
     }
     
-    public void render(){
+    public void render() {
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null) {
             this.createBufferStrategy(3);
@@ -81,16 +90,41 @@ public class Game extends Canvas implements Runnable{
         }
         
         Graphics g = bs.getDrawGraphics();
-        ///////////////////////////////////
+        
+        //Graphics settings
+////////////////////////////////////////////
         
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, 1000, 563);
         
         handler.render(g);
         
-        ///////////////////////////////////
+////////////////////////////////////////////
+        
         g.dispose();
         bs.show();
+    }
+    
+    private void LoadLevel(BufferedImage image) {
+    	int width = image.getWidth();
+    	int height = image.getHeight();
+    	
+    	for(int i = 0; i < width; i++) {
+    		for(int j = 0; j < height; j++) {
+    			int pixel = image.getRGB(i, j);
+    			int red = (pixel >> 16) & 0xff;
+    			int green = (pixel >> 8) & 0xff;
+    			int blue = (pixel) & 0xff;
+    			
+    			if(red == 255) {
+    				handler.addObject(new Block(i*32, j*32, ID.Block));
+    			}
+    			
+    			if(blue == 255) {
+    				handler.addObject(new Player(i*32, j*32, ID.Player, handler));
+    			}
+    		}
+    	}
     }
     
     public static void main(String args[]) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package theGame;
 
 import java.awt.*;
@@ -24,7 +19,8 @@ public abstract class GameObject {
     public abstract Rectangle getBounds();
 
     //Getters and Setters
-    //////////////////////////////////////
+////////////////////////////////////////
+    
     public int getX() {
         return x;
     }
@@ -64,5 +60,7 @@ public abstract class GameObject {
     public void setID(ID newID) {
         this.id = newID;
     }
-    ////////////////////////////////////////
+    
+////////////////////////////////////////
+    
 }
