@@ -11,16 +11,20 @@ public abstract class GameObject {
     
     protected int x, y;
     protected float velX = 0, velY = 0;
+    protected ID id;
 
-    public GameObject(int x, int y) {
+    public GameObject(int x, int y, ID id) {
         this.x = x;
         this.y = y;
+        this.id = id;
     }
     
     public abstract void tick();
     public abstract void render(Graphics g);
     public abstract Rectangle getBounds();
 
+    //Getters and Setters
+    //////////////////////////////////////
     public int getX() {
         return x;
     }
@@ -53,5 +57,12 @@ public abstract class GameObject {
         this.velY = velY;
     }
     
-    
+    public ID getID() {
+        return id;
+    }
+
+    public void setID(ID newID) {
+        this.id = newID;
+    }
+    ////////////////////////////////////////
 }

@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package theGame;
 
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-/**
- *
- * @author Rok
- */
 public class Window {
     private final int width, height;
     private final String title;

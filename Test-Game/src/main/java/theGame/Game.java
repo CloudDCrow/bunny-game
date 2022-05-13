@@ -18,11 +18,9 @@ public class Game extends Canvas implements Runnable{
         this.start();
         
         handler = new Handler();
+        this.addKeyListener(new KeyInput(handler));
         
-        handler.addObject(new Box(100,100));
-        handler.addObject(new Box(400,100));
-        handler.addObject(new Box(200,300));
-
+        handler.addObject(new Player(100, 100, ID.Player, handler));
     }
     
     private void start() {
@@ -40,7 +38,7 @@ public class Game extends Canvas implements Runnable{
         }
     }
     
-    //Gameloop
+    //Game loop
     @Override
     public void run() {
         this.requestFocus();
@@ -86,7 +84,7 @@ public class Game extends Canvas implements Runnable{
         ///////////////////////////////////
         
         g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(0, 0, 1000, 500);
+        g.fillRect(0, 0, 1000, 563);
         
         handler.render(g);
         
