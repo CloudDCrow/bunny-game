@@ -10,11 +10,19 @@ public class Game extends Canvas implements Runnable{
     
     private boolean isRunning = false;
     private Thread thread;
+    private Handler handler;
     
     public Game() {
         Window window = new Window(1000, 563, "Test Game", this);
         window.start();
         this.start();
+        
+        handler = new Handler();
+        
+        handler.addObject(new Box(100,100));
+        handler.addObject(new Box(400,100));
+        handler.addObject(new Box(200,300));
+
     }
     
     private void start() {
@@ -32,6 +40,7 @@ public class Game extends Canvas implements Runnable{
         }
     }
     
+    //Gameloop
     @Override
     public void run() {
         this.requestFocus();
@@ -63,7 +72,7 @@ public class Game extends Canvas implements Runnable{
     }
     
     public void tick() {
-    
+        handler.tick();
     }
     
     public void render(){
@@ -76,9 +85,11 @@ public class Game extends Canvas implements Runnable{
         Graphics g = bs.getDrawGraphics();
         ///////////////////////////////////
         
-        g.setColor(Color.red);
-        g.fill3DRect(500, 200, 30, 30, isRunning);
-        g.fillOval(400, 300, 60, 60);
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(0, 0, 1000, 500);
+        
+        handler.render(g);
+        
         ///////////////////////////////////
         g.dispose();
         bs.show();
