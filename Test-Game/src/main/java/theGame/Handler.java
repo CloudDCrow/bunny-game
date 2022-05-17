@@ -21,9 +21,6 @@ public class Handler {
     }    
     
     public void render(Graphics g) {
-        /*for(GameObject obj: this.object) {
-            obj.render(g);
-        } */
     	for(int i = 0; i < this.object.size(); i++) {
     		GameObject obj = this.object.get(i);
     		obj.render(g);
