@@ -11,7 +11,12 @@ public class Handler {
     private boolean up = false,
                     down = false,
                     left = false,
-                    right = false;
+                    right = false,
+                    goingUp = false,
+				    goingDown = false,
+				    goingLeft = false,
+				    goingRight = false;
+
     
     public void tick() {
     	for(int i = 0; i < this.object.size(); i++) {
@@ -35,7 +40,7 @@ public class Handler {
         this.object.remove(tempObject);
     }
 
-    //Movement Getters and Setters
+    //Player Movements Getters and Setters
 ////////////////////////////////////////////
     
     public boolean isUp() {
@@ -46,13 +51,14 @@ public class Handler {
         return down;
     }
 
-    public boolean isLeft() {
+	public boolean isLeft() {
         return left;
     }
 
     public boolean isRight() {
         return right;
     }
+    
 
     public void setUp(boolean up) {
         this.up = up;
@@ -72,4 +78,41 @@ public class Handler {
     
 ////////////////////////////////////////////
     
+    //Projectile movements
+    
+////////////////////////////////////////////
+    
+    public boolean isGoingUp() {
+		return this.goingUp;
+	}
+
+	public void setGoUp(boolean goUp) {
+		this.goingUp = goUp;
+	}
+
+	public boolean isGoingDown() {
+		return this.goingDown;
+	}
+
+	public void setGoDown(boolean goDown) {
+		this.goingDown = goDown;
+	}
+
+	public boolean isGoingLeft() {
+		return this.goingLeft;
+	}
+
+	public void setGoLeft(boolean goLeft) {
+		this.goingLeft = goLeft;
+	}
+
+	public boolean isGoingRight() {
+		return this.goingRight;
+	}
+
+	public void setGoRight(boolean goRight) {
+		this.goingRight = goRight;
+	}
+////////////////////////////////////////////
+
 }

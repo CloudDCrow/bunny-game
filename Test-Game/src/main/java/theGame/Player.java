@@ -51,11 +51,11 @@ public class Player extends GameObject{
     }
     
     private void collision() {
+    	
     	for(int i = 0; i < handler.object.size(); i++) {
-    		
     		GameObject tempObject = handler.object.get(i);
     		
-    		if(tempObject.getID() == ID.Block) {
+    		if(tempObject.getID() == ID.Block) {	
     			
     			if(getBounds().intersects(tempObject.getBounds())) {
     				x += velX * -1;
