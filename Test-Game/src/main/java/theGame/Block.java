@@ -11,7 +11,6 @@ public class Block extends GameObject{
 	}
 
 	public void tick() {
-		
 	}
 
 	public void render(Graphics g) {
@@ -22,5 +21,4 @@ public class Block extends GameObject{
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, 32, 32);
 	}
-	
 }

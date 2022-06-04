@@ -1,4 +1,3 @@
-
 package theGame;
 
 import java.awt.*;
@@ -20,8 +19,8 @@ public class Game extends Canvas implements Runnable{
         window.start();
         this.start();
         
-        handler = new Handler();
-        camera = new Camera(0, 0);
+        this.handler = new Handler();
+        this.camera = new Camera(0, 0);
         this.addKeyListener(new KeyInput(handler));
         
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -31,15 +30,16 @@ public class Game extends Canvas implements Runnable{
     }
     
     private void start() {
-        isRunning = true;
-        thread = new Thread(this);
-        thread.start();
+        this.isRunning = true;
+        this.thread = new Thread(this);
+        this.thread.start();
     }
     
     public void stop() {
-        isRunning = false;
+        this.isRunning = false;
+        
         try {
-            thread.join();
+            this.thread.join();
         } catch (InterruptedException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -82,17 +82,19 @@ public class Game extends Canvas implements Runnable{
     
     public void tick() {
     	
-    	for(int i = 0; i < handler.object.size(); i++) {
-    		if(handler.object.get(i).getID() == ID.Player) {
-    			camera.tick(handler.object.get(i));
-    		}
-    	}
-    	
-        handler.tick();
+		for(int i = 0; i < handler.object.size(); i++) {
+			
+			if(handler.object.get(i).getID() == ID.Player) {
+				this.camera.tick(this.handler.object.get(i));
+			}
+		}
+		
+	    this.handler.tick();
     }
     
     public void render() {
         BufferStrategy bs = this.getBufferStrategy();
+        
         if(bs == null) {
             this.createBufferStrategy(3);
             return;
@@ -131,11 +133,11 @@ public class Game extends Canvas implements Runnable{
     			int blue = (pixel) & 0xff;
     			
     			if(red == 255) {
-    				handler.addObject(new Block(i*32, j*32, ID.Block));
+    				this.handler.addObject(new Block(i*32, j*32, ID.Block));
     			}
     			
     			if(blue == 255) {
-    				handler.addObject(new Player(i*32, j*32, ID.Player, handler));
+    				this.handler.addObject(new Player(i*32, j*32, ID.Player, handler));
     			}
     		}
     	}
@@ -144,6 +146,4 @@ public class Game extends Canvas implements Runnable{
     public static void main(String args[]) {
         Game game = new Game();
     }
-
-    
 }

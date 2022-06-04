@@ -5,7 +5,7 @@ import java.awt.*;
 public abstract class GameObject {
     
     protected int x, y;
-    public float velX = 0, velY = 0;
+    protected float velX = 0, velY = 0;
     protected ID id;
 
     public GameObject(int x, int y, ID id) {

@@ -13,7 +13,7 @@ public class Projectile extends GameObject {
 		this.handler = handler;
 		
 		 //Projectile movements
-		/////////////////////////////////////////
+///////////////////////////////////////////////////
 
 			if(this.handler.isGoingUp()) {
 				this.velY = -10;
@@ -30,7 +30,8 @@ public class Projectile extends GameObject {
 				this.velX = 10;
 			}
 				
-		/////////////////////////////////////////
+///////////////////////////////////////////////////
+			
 	}
 
 	@Override
@@ -38,8 +39,8 @@ public class Projectile extends GameObject {
 
 		this.x += this.velX;
 		this.y += this.velY;
+		collision();
 
-		this.collision();
 	}
 
 

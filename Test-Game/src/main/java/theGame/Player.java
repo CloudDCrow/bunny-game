@@ -13,12 +13,13 @@ public class Player extends GameObject{
         this.handler = handler;
     }
     
+    @Override
     public void tick() {
-        x += velX;
-        y += velY;
-        
-        collision();
-        
+    	
+        this.x += velX;
+        this.y += velY;
+		collision();
+
         //Players movements
 /////////////////////////////////////////
         
@@ -44,7 +45,7 @@ public class Player extends GameObject{
             velX = 5;
         }else if(!handler.isLeft()){
             velX = 0;
-        }
+        } 
         
 /////////////////////////////////////////
 
@@ -58,18 +59,20 @@ public class Player extends GameObject{
     		if(tempObject.getID() == ID.Block) {	
     			
     			if(getBounds().intersects(tempObject.getBounds())) {
-    				x += velX * -1;
-    				y += velY * -1;
+    				this.x += velX * -1;
+    				this.y += velY * -1;
     			}
     		}
     	}
     }
 
+    @Override
     public void render(Graphics g) {
         g.setColor(Color.BLUE);
         g.fillRect(x, y, 20, 50);
     }
 
+    @Override
     public Rectangle getBounds() {
         return new Rectangle (x, y, 20, 50);
     }

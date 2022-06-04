@@ -78,8 +78,8 @@ public class Handler {
     
 ////////////////////////////////////////////
     
-    //Projectile movements
     
+    //Projectile movements
 ////////////////////////////////////////////
     
     public boolean isGoingUp() {
