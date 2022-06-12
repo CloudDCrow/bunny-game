@@ -22,6 +22,7 @@ public class Projectile extends GameObject {
 			if(this.handler.isGoingDown()) {
 				this.velY = 10;
 			}
+			
 			if(this.handler.isGoingLeft()) {
 				this.velX = -10;
 			}
@@ -68,5 +69,4 @@ public class Projectile extends GameObject {
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, 8, 8);
 	}
-
 }

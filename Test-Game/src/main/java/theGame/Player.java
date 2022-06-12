@@ -7,7 +7,8 @@ import java.awt.Rectangle;
 public class Player extends GameObject{
     
     Handler handler;
-
+    private int HP = 1000;
+    		
     public Player(int x, int y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
@@ -59,11 +60,27 @@ public class Player extends GameObject{
     		if(tempObject.getID() == ID.Block) {	
     			
     			if(getBounds().intersects(tempObject.getBounds())) {
+
     				this.x += velX * -1;
     				this.y += velY * -1;
     			}
     		}
+    		
+			if(tempObject.getID() == ID.Enemy) {	
+    			
+    			if(getBounds().intersects(tempObject.getBounds())) {
+    				loseHP();
+    			}
+    		}
     	}
+    }
+    
+    public int loseHP() {
+    	return this.HP -= 100;
+    }
+    
+    public boolean dead() {
+    	return HP == 0;
     }
 
     @Override

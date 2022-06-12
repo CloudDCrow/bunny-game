@@ -12,7 +12,7 @@ import static java.lang.Integer.sum;
 import java.util.ArrayList;
 import java.lang.StringBuilder;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.IntStream;
 import static java.util.stream.IntStream.range;
 
@@ -20,26 +20,18 @@ public class mmmmmm {
     
     public static void main(String[] args) {
         
-    
-        int[] numbers = {1,2,3,4,5,6,7,9,10,11,12,13};
-
-        int sm = Arrays.stream(numbers).sum(); 
-        int sum = 0;
-        System.out.println(sm);
-        
-        for(int i = 1; i <= numbers.length;i++) {
-            sum += i;
+        String a = "aefsdfsefsaefasaf";
+        String[] arr = a.split("");
+         String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        StringBuilder builder = new StringBuilder();
+      
+      for(int i = 0; i < alphabet.length(); i++) {
+        if(a.contains(alphabet.charAt(i) + "")) {
+            builder.append(alphabet.charAt(i));
         }
-        System.out.println(sum);
-        System.out.println(numbers.length + 1 - (sm  -sum));
-  }
-
-    private static void sum(int range, int length) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-
-
+      }
+      
+        System.out.println(builder);
+   }
 }
    

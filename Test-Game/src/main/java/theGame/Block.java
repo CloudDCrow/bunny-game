@@ -15,7 +15,7 @@ public class Block extends GameObject{
 
 	public void render(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(x, y, 32, 32);
+		g.fillRect(x, y, 30, 30);
 	}
 
 	public Rectangle getBounds() {

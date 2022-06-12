@@ -1,39 +1,85 @@
 package theGame;
 
-import java.awt.Color; 
+import java.awt.Color;   
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
 public class Enemy extends GameObject{
 	
-	private int VelX = 0;
-	private int VelY = 0;
+
 	private Handler handler;
-	Random rng = new Random();
-	int movement = 0;
-	int HP = 200;
+	private Random rng = new Random();
+	private int velX = 0;
+	private int velY = 0;
+	private boolean changedMovement = false;
+	private int count = 0;
+	private int HP = 0;
 	
 	public Enemy(int x, int y, ID id, Handler handler) {
 		super(x, y, id);
 		this.handler = handler;
+		this.HP = 200;
+		this.velX = rng.nextInt(3 + 2) - 2;
+		this.velY = rng.nextInt(3 + 2) - 2;
 	}
 	
 	@Override
 	public void tick() {
-		x += VelX;
-		y += VelY;
+
+		this.x += velX;
+		this.y += velY;
+		collision();
+
 		
-		VelX = rng.nextInt(5 + 5) - 5;
-		VelY = rng.nextInt(5 + 5) - 5;
+		if((changedMovement & count == 14) || velX == 0 || velY == 0 || count == 100) {
+			this.velX = rng.nextInt(3 + 2) - 2;
+			this.velY = rng.nextInt(3 + 2) - 2;
+			changedMovement = false;
+			count = 0;
+		}
 		
+		while(velX == 0 || velY == 0) {
+			this.velX = rng.nextInt(3 + 2) - 2;
+			this.velY = rng.nextInt(3 + 2) - 2;
+		}
+		
+		count++;
+		
+
+	}
+	
+	public void collision() {
 		for(int i = 0; i < handler.object.size(); i++) {
 			GameObject tempObject = handler.object.get(i);
 			
 			if(tempObject.getID() == ID.Projectile) {
 				if(getBounds().intersects(tempObject.getBounds())) {
 					handler.removeObject(tempObject);
-					handler.removeObject(this);
+					this.HP -= 100;
+					if(this.HP == 0) {
+						handler.removeObject(this);
+					}
+				}
+			}
+			
+			if(tempObject.getID() == ID.Block) {
+				if(getLargeBounds().intersects(tempObject.getBounds())) {
+					count = 0;
+					changedMovement = true;
+					
+						this.x += this.velX *-1;
+	    				this.y += this.velY * -1;
+	    				
+	    				velX = velX * -1;
+	    				velY = velY * -1;
+
+				}
+			}
+			
+			if(tempObject.getID() == ID.Player) {
+				if(getLargeBounds().intersects(tempObject.getBounds())) {
+					
 				}
 			}
 		}
@@ -42,12 +88,16 @@ public class Enemy extends GameObject{
 	@Override
 	public void render(Graphics g) {
 		g.setColor(Color.yellow);
-		g.fillRect(x, y, 31, 31);
+		g.fillRect(x, y, 32, 16);
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, 31, 31);
+		return new Rectangle(x, y, 32, 16);
+	}
+	
+	public Rectangle getLargeBounds() {
+		return new Rectangle(x - 8, y - 8, 64, 32);
 	}
 
 }
