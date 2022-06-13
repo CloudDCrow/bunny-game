@@ -5,6 +5,7 @@ import java.awt.event.*;
 public class KeyInput extends KeyAdapter{
     
     private Handler handler;
+    private Sprites sprite;
     
     public KeyInput(Handler handler) {
         this.handler = handler;
@@ -23,7 +24,7 @@ public class KeyInput extends KeyAdapter{
 
             		Projectile bullet = new Projectile(tempObject.getX()+2,
       						 tempObject.getY()+24,
-       						 ID.Projectile, handler, 0, 0);
+       						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
             	}
@@ -33,7 +34,7 @@ public class KeyInput extends KeyAdapter{
 
             		Projectile bullet = new Projectile(tempObject.getX()+2,
       						 tempObject.getY()+24,
-       						 ID.Projectile, handler, 0, 0);
+       						 ID.Projectile, handler, 0, 0, sprite);
 
             		this.handler.addObject(bullet);
             	}
@@ -43,7 +44,7 @@ public class KeyInput extends KeyAdapter{
 
             		Projectile bullet = new Projectile(tempObject.getX()+2,
       						 tempObject.getY()+24,
-       						 ID.Projectile, handler, 0, 0);
+       						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
             	}
@@ -53,7 +54,7 @@ public class KeyInput extends KeyAdapter{
 
             		Projectile bullet = new Projectile(tempObject.getX()+2,
       						 tempObject.getY()+24,
-       						 ID.Projectile, handler, 0, 0);
+       						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
             	}

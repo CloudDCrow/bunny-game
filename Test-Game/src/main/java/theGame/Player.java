@@ -3,15 +3,18 @@ package theGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Player extends GameObject{
     
     Handler handler;
     private int HP = 1000;
+    private BufferedImage playerSprite;
     		
-    public Player(int x, int y, ID id, Handler handler) {
-        super(x, y, id);
+    public Player(int x, int y, ID id, Handler handler, Sprites sprite) {
+        super(x, y, id, sprite);
         this.handler = handler;
+        this.playerSprite = sprite.getSubimage(1, 1, 32, 48);
     }
     
     @Override
@@ -85,12 +88,11 @@ public class Player extends GameObject{
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(x, y, 20, 50);
+        g.drawImage(playerSprite, x , y, null);
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle (x, y, 20, 50);
+        return new Rectangle (x, y, 32, 46);
     }
 }

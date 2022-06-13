@@ -8,8 +8,8 @@ public class Projectile extends GameObject {
 
 	private Handler handler;
 	
-	public Projectile(int x, int y, ID id, Handler handler, int velY, int velX) {
-		super(x, y, id);
+	public Projectile(int x, int y, ID id, Handler handler, int velY, int velX, Sprites sprite) {
+		super(x, y, id, sprite);
 		this.handler = handler;
 		
 		 //Projectile movements

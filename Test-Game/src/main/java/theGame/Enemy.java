@@ -16,8 +16,8 @@ public class Enemy extends GameObject{
 	private int count = 0;
 	private int HP = 0;
 	
-	public Enemy(int x, int y, ID id, Handler handler) {
-		super(x, y, id);
+	public Enemy(int x, int y, ID id, Handler handler, Sprites sprite) {
+		super(x, y, id, sprite);
 		this.handler = handler;
 		this.HP = 200;
 		this.velX = rng.nextInt(3 + 2) - 2;

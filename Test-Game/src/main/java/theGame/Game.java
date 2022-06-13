@@ -12,6 +12,8 @@ public class Game extends Canvas implements Runnable{
     private Thread thread;
     private Handler handler;
     private BufferedImage level = null;
+    private BufferedImage sprites = null;
+    private Sprites spriteSheet;
     private Camera camera;
     
     public Game() {
@@ -25,7 +27,9 @@ public class Game extends Canvas implements Runnable{
         
         BufferedImageLoader loader = new BufferedImageLoader();
         this.level = loader.loadImage("/test-level.png");
+        this.sprites = loader.loadImage("/sprite-sheet.png");
         
+        this.spriteSheet = new Sprites(sprites);
         this.LoadLevel(level);
     }
     
@@ -133,15 +137,15 @@ public class Game extends Canvas implements Runnable{
     			int blue = (pixel) & 0xff;
     			
     			if(red == 255 && green == 255) {
-    				this.handler.addObject(new Enemy(i*32, j*32, ID.Enemy, handler));
+    				this.handler.addObject(new Enemy(i*32, j*32, ID.Enemy, handler, spriteSheet));
     			}
     			
     			if(red == 255 && green == 0) {
-    				this.handler.addObject(new Block(i*32, j*32, ID.Block));
+    				this.handler.addObject(new Block(i*32, j*32, ID.Block, spriteSheet));
     			}
     			
     			if(blue == 255) {
-    				this.handler.addObject(new Player(i*32, j*32, ID.Player, handler));
+    				this.handler.addObject(new Player(i*32, j*32, ID.Player, handler, spriteSheet));
     			}		
     		}
     	}

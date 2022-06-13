@@ -6,8 +6,8 @@ import java.awt.Rectangle;
 
 public class Block extends GameObject{
 
-	public Block(int x, int y, ID id) {
-		super(x, y, id);
+	public Block(int x, int y, ID id, Sprites sprite) {
+		super(x, y, id, sprite);
 	}
 
 	public void tick() {
@@ -15,7 +15,7 @@ public class Block extends GameObject{
 
 	public void render(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(x, y, 30, 30);
+		g.fillRect(x, y, 32, 32);
 	}
 
 	public Rectangle getBounds() {
