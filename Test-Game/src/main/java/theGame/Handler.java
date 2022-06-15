@@ -15,7 +15,8 @@ public class Handler {
                     goingUp = false,
 				    goingDown = false,
 				    goingLeft = false,
-				    goingRight = false;
+				    goingRight = false,
+    				muted = false;
 
     
     public void tick() {
@@ -115,4 +116,13 @@ public class Handler {
 	}
 ////////////////////////////////////////////
 
+	//Music
+////////////////////////////////////////////
+	public void muteSong(boolean mute) {
+		this.muted = mute;
+	}
+	
+	public boolean isMuted() {
+		return this.muted;
+	}
 }

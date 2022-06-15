@@ -1,16 +1,21 @@
 package theGame;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Projectile extends GameObject {
 
 	private Handler handler;
+    //private BufferedImage projectileSprite;
+
 	
 	public Projectile(int x, int y, ID id, Handler handler, int velY, int velX, Sprites sprite) {
 		super(x, y, id, sprite);
 		this.handler = handler;
+        //this.projectileSprite = sprite.getSubimage(4, 1, 5, 6);
+
 		
 		 //Projectile movements
 ///////////////////////////////////////////////////
@@ -61,9 +66,11 @@ public class Projectile extends GameObject {
     
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.blue);
-		g.fillOval(x, y, 10, 10);
-	}
+       // g.drawImage(projectileSprite, x , y, null);
+		g.setColor(Color.red);
+		g.drawRect(x, y, 8, 8);;
+
+}
 
 	@Override
 	public Rectangle getBounds() {

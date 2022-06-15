@@ -1,10 +1,17 @@
 package theGame;
 
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.util.logging.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Game extends Canvas implements Runnable{
     
@@ -15,8 +22,9 @@ public class Game extends Canvas implements Runnable{
     private BufferedImage sprites = null;
     private Sprites spriteSheet;
     private Camera camera;
+    private MusicPlayer music;
     
-    public Game() {
+    public Game() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         Window window = new Window(1000, 563, "Test Game", this);
         window.start();
         this.start();
@@ -31,6 +39,9 @@ public class Game extends Canvas implements Runnable{
         
         this.spriteSheet = new Sprites(sprites);
         this.LoadLevel(level);
+        this.music = new MusicPlayer();
+        this.music.play();
+ 
     }
     
     private void start() {
@@ -151,7 +162,7 @@ public class Game extends Canvas implements Runnable{
     	}
     }
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         Game game = new Game();
     }
 }

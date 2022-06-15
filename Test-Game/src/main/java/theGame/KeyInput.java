@@ -19,6 +19,8 @@ public class KeyInput extends KeyAdapter{
         	
             if(tempObject.getID() == ID.Player) {            	
             	
+            	//Projectile
+///////////////////////////////////////////////////////////////////////////////////
             	if(key == (KeyEvent.VK_UP)) {
             		handler.setGoUp(true);
 
@@ -58,11 +60,26 @@ public class KeyInput extends KeyAdapter{
 
             		handler.addObject(bullet);
             	}
-            	
+///////////////////////////////////////////////////////////////////////////////////
+
+            	//Player
+///////////////////////////////////////////////////////////////////////////////////
                 if(key == KeyEvent.VK_W) handler.setUp(true);
                 if(key == KeyEvent.VK_A) handler.setLeft(true);
                 if(key == KeyEvent.VK_S) handler.setDown(true);
-                if(key == KeyEvent.VK_D) handler.setRight(true); 
+                if(key == KeyEvent.VK_D) handler.setRight(true);
+///////////////////////////////////////////////////////////////////////////////////
+
+                //Music
+///////////////////////////////////////////////////////////////////////////////////
+                if(key == KeyEvent.VK_M) {
+                	if(handler.isMuted()) {
+                		handler.muteSong(true);
+                	} else {
+                		handler.muteSong(false);
+                	}
+                }
+///////////////////////////////////////////////////////////////////////////////////
             }
         }
     }
