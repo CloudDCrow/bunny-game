@@ -13,21 +13,26 @@ public class MusicPlayer {
 	
 	private Handler handler;
 	
-	public void play() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public MusicPlayer(Handler handler) {
+		this.handler = handler;
+	}
 	
-		Scanner scn = new Scanner(System.in);
-		
+	public void play() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+			
 		File file = new File("res/demo-song.wav");
 		AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
 		Clip clip = AudioSystem.getClip();
 		clip.open(audioStream);
 		
-		clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
-		
-		String g = scn.nextLine();
-		if(handler.isMuted()) {
-			clip.stop();;
-		}
+		 while(true) {			   
+			   if(handler.isMuted()) {
+				   clip.stop();
+			   }
+			   
+			   if(!handler.isMuted()) {
+			   		clip.start();
+			   		clip.loop(Clip.LOOP_CONTINUOUSLY);
+			   }
+		  }
 	}		 
 }

@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable{
         
         this.spriteSheet = new Sprites(sprites);
         this.LoadLevel(level);
-        this.music = new MusicPlayer();
+        this.music = new MusicPlayer(handler);
         this.music.play();
  
     }

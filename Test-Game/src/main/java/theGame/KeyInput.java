@@ -72,13 +72,7 @@ public class KeyInput extends KeyAdapter{
 
                 //Music
 ///////////////////////////////////////////////////////////////////////////////////
-                if(key == KeyEvent.VK_M) {
-                	if(handler.isMuted()) {
-                		handler.muteSong(true);
-                	} else {
-                		handler.muteSong(false);
-                	}
-                }
+                if(key == KeyEvent.VK_M) handler.muteSong(!handler.isMuted());
 ///////////////////////////////////////////////////////////////////////////////////
             }
         }
