@@ -2,16 +2,20 @@ package theGame;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 
 public class Game extends Canvas implements Runnable{
     
@@ -23,25 +27,30 @@ public class Game extends Canvas implements Runnable{
     private Sprites spriteSheet;
     private Camera camera;
     private MusicPlayer music;
+    private Player player;
+    private int SCREEN_WIDTH = 1000;
+    private int SCREEN_HEIGHT = 563;
+
     
     public Game() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        Window window = new Window(1000, 563, "Test Game", this);
+        Window window = new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Firebunny Adventure", this);
         window.start();
         this.start();
         
         this.handler = new Handler();
         this.camera = new Camera(0, 0);
-        this.addKeyListener(new KeyInput(handler));
         
         BufferedImageLoader loader = new BufferedImageLoader();
         this.level = loader.loadImage("/test-level.png");
         this.sprites = loader.loadImage("/sprite-sheet.png");
-        
+        this.music = new MusicPlayer(handler, "demo-song.wav");
+       
         this.spriteSheet = new Sprites(sprites);
-        this.LoadLevel(level);
-        this.music = new MusicPlayer(handler);
+        this.addKeyListener(new KeyInput(handler, spriteSheet));
+        
+        this.loadLevel(level);
         this.music.play();
- 
+
     }
     
     private void start() {
@@ -60,7 +69,7 @@ public class Game extends Canvas implements Runnable{
         }
     }
     
-    //Game loop
+    //Game loop, made by Notch
 /////////////////////////////////////////////
     
     @Override
@@ -81,13 +90,22 @@ public class Game extends Canvas implements Runnable{
            //updates++;
            delta--;
           }
+		
           render();
+
           frames++;
 
           if (System.currentTimeMillis() - timer > 1000) {
            timer += 1000;
            frames = 0;
            //updates = 0;
+          }
+          
+          if(this.player != null & this.handler.toReset()) {
+        	  if(this.player.isDead()) {
+        		  this.handler.removeAllObjects();
+        		  this.loadLevel(level);
+        	  }
           }
          }
          stop();    
@@ -120,7 +138,7 @@ public class Game extends Canvas implements Runnable{
         
         //Graphics settings
 ////////////////////////////////////////////
-                
+        
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, 1000, 563);
         
@@ -130,13 +148,42 @@ public class Game extends Canvas implements Runnable{
         
         g2d.translate(camera.getX(), camera.getY());
         
+        g.setColor(Color.gray);
+        g.fillRect(5, 5, 200, 20);
+        
+    	if(this.player != null) {
+            g.setColor(Color.black);
+            g.setFont(new Font("Ink Free", Font.BOLD, 20));
+            g.drawString("HP: " + this.player.getHP(), 5, 40);
+            g.setColor(Color.green);
+        	g.fillRect(5, 5, this.player.getHP(), 20);
+            gameOverScreen(g);
+    	}        
+        
 ////////////////////////////////////////////
         
         g.dispose();
         bs.show();
     }
     
-    private void LoadLevel(BufferedImage image) {
+    public void gameOverScreen(Graphics g) {
+		
+		if(this.player.getHP() <= 0) {
+			g.setColor(new Color(0,0,0,100));
+			g.fillRect(0, 0, 1000, 563);
+			g.setColor(Color.red);
+	        g.setFont(new Font("Ink Free", Font.BOLD, 75));
+			FontMetrics metrics = getFontMetrics(g.getFont());
+	    	g.drawString("GAME OVER", (SCREEN_WIDTH - metrics.stringWidth("GAME OVER"))/2, SCREEN_HEIGHT/2 - 50);
+	        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+	        g.setColor(Color.white);
+			FontMetrics metrics2 = getFontMetrics(g.getFont());
+	    	g.drawString("Press 'R' to reset",(SCREEN_WIDTH - metrics2.stringWidth("Press 'R' to reset"))/2, SCREEN_HEIGHT/2);
+		}
+
+    }
+    
+    private void loadLevel(BufferedImage image) {
     	int width = image.getWidth();
     	int height = image.getHeight();
     	
@@ -156,7 +203,7 @@ public class Game extends Canvas implements Runnable{
     			}
     			
     			if(blue == 255) {
-    				this.handler.addObject(new Player(i*32, j*32, ID.Player, handler, spriteSheet));
+    				this.handler.addObject(player = new Player(i*32, j*32, ID.Player, handler, spriteSheet));
     			}		
     		}
     	}
@@ -164,5 +211,6 @@ public class Game extends Canvas implements Runnable{
     
     public static void main(String args[]) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         Game game = new Game();
+
     }
 }

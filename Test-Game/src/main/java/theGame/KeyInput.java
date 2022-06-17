@@ -6,9 +6,11 @@ public class KeyInput extends KeyAdapter{
     
     private Handler handler;
     private Sprites sprite;
+    private long lastKeyPress;
     
-    public KeyInput(Handler handler) {
+    public KeyInput(Handler handler, Sprites sprite) {
         this.handler = handler;
+        this.sprite = sprite;
     }
  
     public void keyPressed(KeyEvent e) {
@@ -22,43 +24,65 @@ public class KeyInput extends KeyAdapter{
             	//Projectile
 ///////////////////////////////////////////////////////////////////////////////////
             	if(key == (KeyEvent.VK_UP)) {
+            		if(System.currentTimeMillis() - lastKeyPress > 150) {
             		handler.setGoUp(true);
 
-            		Projectile bullet = new Projectile(tempObject.getX()+2,
-      						 tempObject.getY()+24,
+            		Projectile bullet = new Projectile(tempObject.getX()+10,
+      						 tempObject.getY(),
        						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
+            		lastKeyPress = System.currentTimeMillis();
+            		break;
+            		}
             	}
             	
             	if(key == (KeyEvent.VK_LEFT)) {
+            		if(System.currentTimeMillis() - lastKeyPress > 150) {
+
             		this.handler.setGoLeft(true);
 
             		Projectile bullet = new Projectile(tempObject.getX()+2,
-      						 tempObject.getY()+24,
+      						 tempObject.getY()+34,
        						 ID.Projectile, handler, 0, 0, sprite);
 
             		this.handler.addObject(bullet);
+            		lastKeyPress = System.currentTimeMillis();
+
+            		break;
+            		}
             	}
             	
             	if(key == (KeyEvent.VK_DOWN)) {
+            		if(System.currentTimeMillis() - lastKeyPress > 150) {
+
             		this.handler.setGoDown(true);
 
-            		Projectile bullet = new Projectile(tempObject.getX()+2,
-      						 tempObject.getY()+24,
+            		Projectile bullet = new Projectile(tempObject.getX()+10,
+      						 tempObject.getY()+34,
        						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
+            		lastKeyPress = System.currentTimeMillis();
+
+            		break;
+            		}
             	}
             	
             	if(key == (KeyEvent.VK_RIGHT)) {
+            		if(System.currentTimeMillis() - lastKeyPress > 150) {
+
             		this.handler.setGoRight(true);
 
-            		Projectile bullet = new Projectile(tempObject.getX()+2,
-      						 tempObject.getY()+24,
+            		Projectile bullet = new Projectile(tempObject.getX()+10,
+      						 tempObject.getY()+34,
        						 ID.Projectile, handler, 0, 0, sprite);
 
             		handler.addObject(bullet);
+            		lastKeyPress = System.currentTimeMillis();
+
+            		break;
+            		}
             	}
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -74,6 +98,8 @@ public class KeyInput extends KeyAdapter{
 ///////////////////////////////////////////////////////////////////////////////////
                 if(key == KeyEvent.VK_M) handler.muteSong(!handler.isMuted());
 ///////////////////////////////////////////////////////////////////////////////////
+                
+                if(key == KeyEvent.VK_R) handler.resetGame(true);
             }
         }
     }
@@ -110,6 +136,9 @@ public class KeyInput extends KeyAdapter{
                 if(key == KeyEvent.VK_A) handler.setLeft(false);
                 if(key == KeyEvent.VK_S) handler.setDown(false);
                 if(key == KeyEvent.VK_D) handler.setRight(false);
+                
+                if(key == KeyEvent.VK_R) handler.resetGame(false);
+
             }
         }
     }   

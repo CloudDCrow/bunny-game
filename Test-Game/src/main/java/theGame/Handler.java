@@ -1,6 +1,6 @@
 package theGame;
 
-import java.awt.Graphics; 
+import java.awt.Graphics;
 import java.util.*;
 
 
@@ -16,7 +16,9 @@ public class Handler {
 				    goingDown = false,
 				    goingLeft = false,
 				    goingRight = false,
-    				muted = false;
+    				muted = true,
+    				stopKeyInputs = false,
+    				reset = false;
 
     
     public void tick() {
@@ -39,6 +41,11 @@ public class Handler {
     
     public void removeObject(GameObject tempObject) {
         this.object.remove(tempObject);
+    }
+    
+    public void removeAllObjects() {
+    		this.object.clear();
+        
     }
 
     //Player Movements Getters and Setters
@@ -76,7 +83,6 @@ public class Handler {
     public void setRight(boolean right) {
         this.right = right;
     }
-    
 ////////////////////////////////////////////
     
     
@@ -124,5 +130,13 @@ public class Handler {
 	
 	public boolean isMuted() {
 		return this.muted;
+	}
+	
+	public void resetGame(boolean reset) {
+		this.reset = reset;
+	}
+	
+	public boolean toReset() {
+		return this.reset;
 	}
 }

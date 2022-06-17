@@ -1,7 +1,8 @@
 package theGame;
 
-import java.awt.Dimension; 
+import java.awt.Dimension;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Window {
@@ -9,12 +10,14 @@ public class Window {
     private final String title;
     private final Game game;
     private JFrame frame;
+    private ImageIcon icon;
 
     public Window(int width, int height, String title, Game game) {
         this.width = width;
         this.height = height;
         this.title = title;
         this.game = game;
+        this.icon = new ImageIcon("res/bunny-icon.png");
     }
 
     public void start() {
@@ -30,5 +33,6 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setIconImage(icon.getImage());
     }
 }

@@ -3,6 +3,7 @@ package theGame;
 import java.awt.Color;   
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Enemy extends GameObject{
@@ -15,6 +16,7 @@ public class Enemy extends GameObject{
 	private boolean changedMovement = false;
 	private int count = 0;
 	private int HP = 0;
+	private BufferedImage enemySprite;
 	
 	public Enemy(int x, int y, ID id, Handler handler, Sprites sprite) {
 		super(x, y, id, sprite);
@@ -22,6 +24,7 @@ public class Enemy extends GameObject{
 		this.HP = 200;
 		this.velX = rng.nextInt(3 + 2) - 2;
 		this.velY = rng.nextInt(3 + 2) - 2;
+		this.enemySprite = sprite.getSubimage(12, 1, 32, 16);
 	}
 	
 	@Override
@@ -87,8 +90,7 @@ public class Enemy extends GameObject{
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.yellow);
-		g.fillRect(x, y, 32, 16);
+		g.drawImage(enemySprite, x, y, null);
 	}
 
 	@Override
