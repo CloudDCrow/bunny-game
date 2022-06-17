@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Player extends GameObject{
     
-    Handler handler;
+    private Handler handler;
     private int HP;
     private BufferedImage playerSprite;
     private long lastCollision;
@@ -23,42 +23,42 @@ public class Player extends GameObject{
     public void tick() {
     	
         if(!isDead()) {
-        	
-	        this.x += velX;
-	        this.y += velY;
-			collision();
+        	if(!this.handler.roomCleared()) {
+        		
+		        this.x += velX;
+		        this.y += velY;
+				collision();
 
 	        //Players movements
 /////////////////////////////////////////
 
-	        if(handler.isUp()) {
-	            velY = -5;
-	        } else if(!handler.isDown()) {
-	            velY = 0;
-	        }
-	        
-	        if(handler.isDown()) {
-	            velY = 5;
-	        }else if(!handler.isUp()) {
-	            velY = 0;
-	        }
-	        
-	        if(handler.isLeft()) {
-	            velX = -5;
-	        }else if(!handler.isRight()) {
-	            velX = 0;
-	        }
-	        
-	        if(handler.isRight()) {
-	            velX = 5;
-	        }else if(!handler.isLeft()){
-	            velX = 0;
-	        }
+		        if(handler.isUp()) {
+		            velY = -5;
+		        } else if(!handler.isDown()) {
+		            velY = 0;
+		        }
+		        
+		        if(handler.isDown()) {
+		            velY = 5;
+		        }else if(!handler.isUp()) {
+		            velY = 0;
+		        }
+		        
+		        if(handler.isLeft()) {
+		            velX = -5;
+		        }else if(!handler.isRight()) {
+		            velX = 0;
+		        }
+		        
+		        if(handler.isRight()) {
+		            velX = 5;
+		        }else if(!handler.isLeft()){
+		            velX = 0;
+		        }
+        	}	
         }
-        
+    }   
 /////////////////////////////////////////
-
-    }
     
     private void collision() {
     	
@@ -82,6 +82,13 @@ public class Player extends GameObject{
             		lastCollision = System.currentTimeMillis();
     			}
     		}
+			
+			if(tempObject.getID() == ID.Potion) {	
+    			
+    			if(getBounds().intersects(tempObject.getBounds())) {
+    				gainHP(50);
+    			}
+    		}
     	}
     }
     
@@ -96,8 +103,12 @@ public class Player extends GameObject{
     	return this.HP;
     }
     
+    public void gainHP(int amount) {
+    	this.HP += 50;
+    }
+    
     public boolean isDead() {
-    	return HP == 0;    	
+    	return HP <= 0;    	
     }
     
     public void revive() {

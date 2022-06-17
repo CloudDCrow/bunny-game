@@ -104,6 +104,7 @@ public class Game extends Canvas implements Runnable{
           if(this.player != null & this.handler.toReset()) {
         	  if(this.player.isDead()) {
         		  this.handler.removeAllObjects();
+        		  this.handler.resetEnemies();
         		  this.loadLevel(level);
         	  }
           }
@@ -158,6 +159,7 @@ public class Game extends Canvas implements Runnable{
             g.setColor(Color.green);
         	g.fillRect(5, 5, this.player.getHP(), 20);
             gameOverScreen(g);
+            roomClearedScreen(g);
     	}        
         
 ////////////////////////////////////////////
@@ -165,7 +167,21 @@ public class Game extends Canvas implements Runnable{
         g.dispose();
         bs.show();
     }
-    
+    public void roomClearedScreen(Graphics g) {
+    	
+    	if(this.handler.roomCleared()) {
+			g.setColor(new Color(0,0,0,100));
+			g.fillRect(0, 0, 1000, 563);
+			g.setColor(Color.green);
+	        g.setFont(new Font("Ink Free", Font.BOLD, 75));
+			FontMetrics metrics = getFontMetrics(g.getFont());
+	    	g.drawString("WELL DONE!", (SCREEN_WIDTH - metrics.stringWidth("WELL DONE!"))/2, SCREEN_HEIGHT/2 - 50);
+	        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+	        g.setColor(Color.white);
+			FontMetrics metrics2 = getFontMetrics(g.getFont());
+	    	g.drawString("Press 'E' to continue",(SCREEN_WIDTH - metrics2.stringWidth("Press 'E' to continue"))/2, SCREEN_HEIGHT/2);
+		}
+    }
     public void gameOverScreen(Graphics g) {
 		
 		if(this.player.getHP() <= 0) {
@@ -180,7 +196,6 @@ public class Game extends Canvas implements Runnable{
 			FontMetrics metrics2 = getFontMetrics(g.getFont());
 	    	g.drawString("Press 'R' to reset",(SCREEN_WIDTH - metrics2.stringWidth("Press 'R' to reset"))/2, SCREEN_HEIGHT/2);
 		}
-
     }
     
     private void loadLevel(BufferedImage image) {
@@ -194,15 +209,19 @@ public class Game extends Canvas implements Runnable{
     			int green = (pixel >> 8) & 0xff;
     			int blue = (pixel) & 0xff;
     			
-    			if(red == 255 && green == 255) {
+    			if(red == 255 && green == 255 && blue == 0) {
     				this.handler.addObject(new Enemy(i*32, j*32, ID.Enemy, handler, spriteSheet));
     			}
     			
-    			if(red == 255 && green == 0) {
+    			if(red == 0 && green == 255 && blue == 255) {
+    				this.handler.addObject(new Potion(i*32, j*32, ID.Potion, handler, spriteSheet));
+    			}
+    			
+    			if(red == 255 && green == 0 && blue == 0) {
     				this.handler.addObject(new Block(i*32, j*32, ID.Block, spriteSheet));
     			}
     			
-    			if(blue == 255) {
+    			if(red == 0 && green == 0 && blue == 255) {
     				this.handler.addObject(player = new Player(i*32, j*32, ID.Player, handler, spriteSheet));
     			}		
     		}

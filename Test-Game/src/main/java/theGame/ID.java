@@ -5,5 +5,6 @@ public enum ID {
     Projectile(),
     Enemy(),
     Ball(),
-    Block();
+    Block(),
+    Potion();
 }

@@ -8,6 +8,8 @@ public class Handler {
     
     ArrayList<GameObject> object = new ArrayList<>();
     
+    private int numberOfEnemies = 99;
+    
     private boolean up = false,
                     down = false,
                     left = false,
@@ -17,10 +19,19 @@ public class Handler {
 				    goingLeft = false,
 				    goingRight = false,
     				muted = true,
-    				stopKeyInputs = false,
     				reset = false;
 
+    public void enemyKiled() {
+    	this.numberOfEnemies--;
+    }
     
+    public boolean roomCleared() {
+    	return numberOfEnemies <= 0;
+    }
+    
+    public void resetEnemies() {
+    	this.numberOfEnemies = 99;
+    }
     public void tick() {
     	for(int i = 0; i < this.object.size(); i++) {
     		GameObject obj = this.object.get(i);

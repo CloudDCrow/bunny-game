@@ -61,6 +61,7 @@ public class Enemy extends GameObject{
 					handler.removeObject(tempObject);
 					this.HP -= 100;
 					if(this.HP == 0) {
+						this.handler.enemyKiled();
 						handler.removeObject(this);
 					}
 				}
