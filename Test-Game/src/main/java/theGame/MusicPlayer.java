@@ -13,29 +13,45 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class MusicPlayer {
 	
 	private Handler handler;
-	private String song;
+	private Clip clip;
 	
-	public MusicPlayer(Handler handler, String song) {
+	public MusicPlayer(Handler handler) {
 		this.handler = handler;
-		this.song = song;
 	}
 	
-	public void play() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public void setSong(String song) {
 			
-		URL file = this.getClass().getResource(song);
-		AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-		Clip clip = AudioSystem.getClip();
-		clip.open(audioStream);
+		try {
+		URL url = this.getClass().getResource(song);
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
+		this.clip = AudioSystem.getClip();
+		this.clip.open(audioStream);
+
+		} catch(Exception e) {
+			
+		}
+	}
+	
+	public void play() {
+	//	clip.setFramePosition(0);
+		clip.start();
+	}
+	
+	public void stop() {
+		clip.stop();
+	}
+	
+	public void mute() {
 		
-		 while(true) {			   
-		   if(handler.isMuted()) {
-			   clip.stop();
+		while(true) {			   
+			if(handler.isMuted()) {
+			   this.clip.stop();
 		   }
 		   
-		   if(!handler.isMuted()) {
-		   		clip.start();
-		   		clip.loop(Clip.LOOP_CONTINUOUSLY);
+			if(!handler.isMuted()) {
+				this.clip.start();
+				this.clip.loop(Clip.LOOP_CONTINUOUSLY);
 		   }
 		 }
-	}		 
+	}
 }

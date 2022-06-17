@@ -17,11 +17,14 @@ public class Enemy extends GameObject{
 	private int count = 0;
 	private int HP = 0;
 	private BufferedImage enemySprite;
+    private MusicPlayer music;
+
 	
 	public Enemy(int x, int y, ID id, Handler handler, Sprites sprite) {
 		super(x, y, id, sprite);
 		this.handler = handler;
 		this.HP = 200;
+        music = new MusicPlayer(handler);
 		this.velX = rng.nextInt(3 + 2) - 2;
 		this.velY = rng.nextInt(3 + 2) - 2;
 		this.enemySprite = sprite.getSubimage(12, 1, 32, 16);
@@ -30,6 +33,14 @@ public class Enemy extends GameObject{
 	@Override
 	public void tick() {
 
+		if(velX <= 0) {
+			this.enemySprite = sprite.getSubimage(12, 1, 32, 16);
+		}
+		
+		if(velX >= 0) {
+			this.enemySprite = sprite.getSubimage(13, 1, 32, 16);
+		}
+		
 		this.x += velX;
 		this.y += velY;
 		collision();
@@ -62,6 +73,8 @@ public class Enemy extends GameObject{
 					this.HP -= 100;
 					if(this.HP == 0) {
 						this.handler.enemyKiled();
+						this.music.setSong("songs/OOF.wav");
+	    				this.music.play();
 						handler.removeObject(this);
 					}
 				}
@@ -77,7 +90,6 @@ public class Enemy extends GameObject{
 	    				
 	    				velX = velX * -1;
 	    				velY = velY * -1;
-
 				}
 			}
 			

@@ -43,7 +43,9 @@ public class Game extends Canvas implements Runnable{
         BufferedImageLoader loader = new BufferedImageLoader();
         this.level = loader.loadImage("/test-level.png");
         this.sprites = loader.loadImage("/sprite-sheet.png");
-        this.music = new MusicPlayer(handler, "demo-song.wav");
+        this.music = new MusicPlayer(handler);
+        this.music.setSong("songs/demo-song.wav");
+
        
         this.spriteSheet = new Sprites(sprites);
         this.addKeyListener(new KeyInput(handler, spriteSheet));
@@ -122,7 +124,6 @@ public class Game extends Canvas implements Runnable{
 				this.camera.tick(this.handler.object.get(i));
 			}
 		}
-		
 	    this.handler.tick();
     }
     
