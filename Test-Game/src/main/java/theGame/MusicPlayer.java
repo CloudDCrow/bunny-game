@@ -27,18 +27,24 @@ public class MusicPlayer {
 		this.clip = AudioSystem.getClip();
 		this.clip.open(audioStream);
 
-		} catch(Exception e) {
-			
+		} catch(Exception e) {	
 		}
 	}
 	
 	public void play() {
-	//	clip.setFramePosition(0);
-		clip.start();
+		this.clip.start();
+	}
+	
+	public boolean isPlaying() {
+		return clip.isRunning();
 	}
 	
 	public void stop() {
-		clip.stop();
+		this.clip.stop();
+	}
+	
+	public void loop() {
+		this.clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
 	public void mute() {

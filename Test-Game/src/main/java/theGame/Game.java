@@ -24,35 +24,39 @@ public class Game extends Canvas implements Runnable{
     private Handler handler;
     private BufferedImage level = null;
     private BufferedImage sprites = null;
+    private BufferedImageLoader loader = null;
     private Sprites spriteSheet;
     private Camera camera;
     private MusicPlayer music;
     private Player player;
+    private String currentLevel;
+    private String currentSong;
     private int SCREEN_WIDTH = 1000;
     private int SCREEN_HEIGHT = 563;
 
     
-    public Game() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public Game(){
         Window window = new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Firebunny Adventure", this);
         window.start();
         this.start();
+        this.currentLevel = "/level_1.png";
+        this.currentSong = "songs/level-1-song.wav";
         
         this.handler = new Handler();
         this.camera = new Camera(0, 0);
-        
-        BufferedImageLoader loader = new BufferedImageLoader();
-        this.level = loader.loadImage("/test-level.png");
-        this.sprites = loader.loadImage("/sprite-sheet.png");
         this.music = new MusicPlayer(handler);
-        this.music.setSong("songs/demo-song.wav");
-
+       
+        this.loader = new BufferedImageLoader();
+        this.level = loader.loadImage(currentLevel);
+        this.sprites = loader.loadImage("/sprite-sheet.png");
+        this.music.setSong(currentSong);   
        
         this.spriteSheet = new Sprites(sprites);
         this.addKeyListener(new KeyInput(handler, spriteSheet));
         
         this.loadLevel(level);
         this.music.play();
-
+        this.music.loop();
     }
     
     private void start() {
@@ -103,13 +107,7 @@ public class Game extends Canvas implements Runnable{
            //updates = 0;
           }
           
-          if(this.player != null & this.handler.toReset()) {
-        	  if(this.player.isDead()) {
-        		  this.handler.removeAllObjects();
-        		  this.handler.resetEnemies();
-        		  this.loadLevel(level);
-        	  }
-          }
+
          }
          stop();    
     }  
@@ -124,6 +122,20 @@ public class Game extends Canvas implements Runnable{
 				this.camera.tick(this.handler.object.get(i));
 			}
 		}
+		
+        if(this.player != null & this.handler.toReset()) {
+      	  if(this.player.isDead()) {
+      		  this.handler.removeAllObjects();
+      		  this.handler.resetEnemies();
+      		  this.loadLevel(level);
+      	  }
+        }
+        
+   	 if(handler.roomCleared() & this.handler.canGoToNextLevel()) {
+   		
+        nextLevelLoader();
+   	 }
+        
 	    this.handler.tick();
     }
     
@@ -202,7 +214,7 @@ public class Game extends Canvas implements Runnable{
     private void loadLevel(BufferedImage image) {
     	int width = image.getWidth();
     	int height = image.getHeight();
-    	
+
     	for(int i = 0; i < width; i++) {
     		for(int j = 0; j < height; j++) {
     			int pixel = image.getRGB(i, j);
@@ -227,6 +239,35 @@ public class Game extends Canvas implements Runnable{
     			}		
     		}
     	}
+    }
+    
+    public void nextLevelLoader() {
+ 	    	
+ 	        this.handler = new Handler();
+ 	        this.camera = new Camera(0, 0);
+ 	        this.music.stop();
+ 	        this.music = new MusicPlayer(handler);
+ 	        getNextLevel();
+        
+ 	    	this.level = loader.loadImage(currentLevel);
+ 	        this.loadLevel(level);
+ 	        
+ 	        this.addKeyListener(new KeyInput(handler, spriteSheet));
+ 	    
+    }
+    
+    public void getNextLevel() {
+    	switch (this.currentLevel) {
+	        case "/level_1.png":
+	        	this.currentLevel = "/level_2.png";
+	          	this.music.setSong("songs/boss.wav");
+	        	this.music.play();
+	        	break;
+    	default:
+	        	this.currentLevel = "/level_1.png";
+	        	this.music.setSong("songs/level-1-song.wav");
+	        	this.music.play();
+	        }
     }
     
     public static void main(String args[]) throws UnsupportedAudioFileException, IOException, LineUnavailableException {

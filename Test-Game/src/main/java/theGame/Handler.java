@@ -8,7 +8,7 @@ public class Handler {
     
     ArrayList<GameObject> object = new ArrayList<>();
     
-    private int numberOfEnemies = 99;
+    private int numberOfEnemies = 1;
     
     private boolean up = false,
                     down = false,
@@ -19,6 +19,7 @@ public class Handler {
 				    goingLeft = false,
 				    goingRight = false,
     				muted = true,
+    				proceed = false,
     				reset = false;
 
     public void enemyKiled() {
@@ -149,5 +150,13 @@ public class Handler {
 	
 	public boolean toReset() {
 		return this.reset;
+	}
+	
+	public void nextLevel(boolean proceed) {
+		this.proceed = proceed;
+	}
+	
+	public boolean canGoToNextLevel() {
+		return this.proceed;
 	}
 }

@@ -100,6 +100,7 @@ public class KeyInput extends KeyAdapter{
 ///////////////////////////////////////////////////////////////////////////////////
                 
                 if(key == KeyEvent.VK_R) handler.resetGame(true);
+                if(key == KeyEvent.VK_E) handler.nextLevel(true);
             }
         }
     }
@@ -138,7 +139,7 @@ public class KeyInput extends KeyAdapter{
                 if(key == KeyEvent.VK_D) handler.setRight(false);
                 
                 if(key == KeyEvent.VK_R) handler.resetGame(false);
-
+                if(key == KeyEvent.VK_E) handler.nextLevel(false);
             }
         }
     }   
