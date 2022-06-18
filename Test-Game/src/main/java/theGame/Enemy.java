@@ -74,7 +74,7 @@ public class Enemy extends GameObject{
 					if(this.HP == 0) {
 						this.handler.enemyKiled();
 						this.music.setSong("songs/OOF.wav");
-	    				this.music.play();
+	    				this.music.playSong(false);
 						handler.removeObject(this);
 					}
 				}

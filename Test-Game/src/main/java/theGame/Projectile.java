@@ -47,6 +47,10 @@ public class Projectile extends GameObject {
 
 	@Override
 	public void tick() {
+		
+		if(this.handler.canGoToNextLevel()) {
+			handler.removeObject(this);
+		}
 
 		this.x += this.velX;
 		this.y += this.velY;

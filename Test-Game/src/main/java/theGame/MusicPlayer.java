@@ -31,15 +31,18 @@ public class MusicPlayer {
 		}
 	}
 	
-	public void play() {
+	public void playSong(boolean loop) {
 		this.clip.start();
+		if(loop) {
+			loop();
+		}
 	}
 	
-	public boolean isPlaying() {
+	public boolean songIsPlaying() {
 		return clip.isRunning();
 	}
 	
-	public void stop() {
+	public void stopSong() {
 		this.clip.stop();
 	}
 	

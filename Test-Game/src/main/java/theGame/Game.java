@@ -18,6 +18,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 
 public class Game extends Canvas implements Runnable{
+	
+    private final int SCREEN_WIDTH = 1000;
+    private final int SCREEN_HEIGHT = 563;
+    private final int startingHP = 200;
+    private final int enemiesInFirstLevel = 2;
+    private final int enemiesInSecondsLevel = 4;
+    private final int enemiesInThridLevel = 10;
+
     
     private boolean isRunning = false;
     private boolean inIntro = true;
@@ -32,8 +40,8 @@ public class Game extends Canvas implements Runnable{
     private Player player;
     private String currentLevel;
     private String currentSong;
-    private int SCREEN_WIDTH = 1000;
-    private int SCREEN_HEIGHT = 563;
+    private int HP;
+    private long lastKeyPress;
 
     
     public Game(){
@@ -42,12 +50,15 @@ public class Game extends Canvas implements Runnable{
         this.start();
         this.currentLevel = "/level_1.png";
         this.currentSong = "songs/intro.wav";
+        this.HP = startingHP;
         
         this.handler = new Handler();
+        this.handler.setNumberOfEnemies(enemiesInFirstLevel);
+        
         this.camera = new Camera(0, 0);
         this.music = new MusicPlayer(handler);
         this.music.setSong(currentSong); 
-        this.music.play();
+        this.music.playSong(false);
        
         this.loader = new BufferedImageLoader();
         this.sprites = loader.loadImage("/sprite-sheet.png");
@@ -101,14 +112,11 @@ public class Game extends Canvas implements Runnable{
          
           render();
           
-          if(this.music.getClip() != null) {
-              if(inIntro)  {
-            	  this.music.stop();
-            	  this.music = new MusicPlayer(handler);
-            	  this.music.setSong("songs/level-1-song.wav");
-            	  this.music.play();
-            	  inIntro = false;
-              }}
+          if(inIntro)  {
+        	  nextSong("songs/level-1-song.wav");
+        	  inIntro = false;
+          }	
+          
     		
           
           frames++;
@@ -145,9 +153,15 @@ public class Game extends Canvas implements Runnable{
         if(this.player != null & this.handler.toReset()) {
       	  if(this.player.isDead()) {
       		  this.handler.removeAllObjects();
-      		  this.handler.resetEnemies();
+      		  this.handler.resetEnemies(enemiesInFirstLevel);
+      		  if(!this.currentLevel.equals("/level_1.png")) {
+      			  nextSong("songs/level-1-song.wav");
+      		  }
+      		  this.currentLevel = "/level_1.png";
+      		  this.HP = startingHP;
               this.level = loader.loadImage(currentLevel);
       		  this.loadLevel(level);
+      		  this.handler.startGame(true);
       	  }
         }  
 ////////////////////////////////////////////////////////////////////
@@ -194,9 +208,9 @@ public class Game extends Canvas implements Runnable{
             g.fillRect(5, 5, 200, 20);
             g.setColor(Color.black);
             g.setFont(new Font("Ink Free", Font.BOLD, 20));
-            g.drawString("HP: " + this.player.getHP(), 5, 40);
+            g.drawString("HP: " + player.getHP(), 5, 40);
             g.setColor(Color.green);
-        	g.fillRect(5, 5, this.player.getHP(), 20);
+        	g.fillRect(5, 5, player.getHP(), 20);
             gameOverScreen(g);
             roomClearedScreen(g);
     	}        
@@ -211,16 +225,21 @@ public class Game extends Canvas implements Runnable{
     	while(!this.handler.canStart() && this.currentLevel.equals("/level_1.png")) {
     		this.inIntro = true;
 			g.setColor(Color.gray);
-			g.fillRect(0, 0, 1000, 563);
+			g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			g.setColor(Color.orange);
 		    g.setFont(new Font("Ink Free", Font.BOLD, 75));
 			FontMetrics metrics = getFontMetrics(g.getFont());
 			g.drawString("FireBunny Adventure", (SCREEN_WIDTH - metrics.stringWidth("FireBunny Adventure"))/2, SCREEN_HEIGHT/2 - 50);
-	        g.setFont(new Font("Ink Free", Font.BOLD, 20));
-			g.setColor(Color.white);
-			FontMetrics metrics2 = getFontMetrics(g.getFont());
-	    	g.drawString("Press 'Enter' to start",(SCREEN_WIDTH - metrics2.stringWidth("Press 'Enter' to start"))/2, SCREEN_HEIGHT/2);
-		
+			
+			if(System.currentTimeMillis() - this.lastKeyPress > 150) {
+		        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+				g.setColor(Color.white);
+				FontMetrics metrics2 = getFontMetrics(g.getFont());
+		    	g.drawString("Press 'Enter' to start",(SCREEN_WIDTH - metrics2.stringWidth("Press 'Enter' to start"))/2, SCREEN_HEIGHT/2);
+        		this.lastKeyPress = System.currentTimeMillis();
+			} else {
+				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+			}
 	        g.dispose();
 	        bs.show();
     	}
@@ -292,7 +311,7 @@ public class Game extends Canvas implements Runnable{
     			}
     			
     			if(red == 0 && green == 0 && blue == 255) {
-    				this.handler.addObject(player = new Player(i*32, j*32, ID.Player, handler, spriteSheet));
+    				this.handler.addObject(player = new Player(i*32, j*32, ID.Player, this.HP, handler, spriteSheet));
     			}		
     		}
     	}
@@ -302,7 +321,7 @@ public class Game extends Canvas implements Runnable{
  	    	
  	        this.handler = new Handler();
  	        this.camera = new Camera(0, 0);
- 	        this.music.stop();
+ 	        this.music.stopSong();
  	        this.music = new MusicPlayer(handler);
  	        getNextLevel();
         
@@ -318,17 +337,29 @@ public class Game extends Canvas implements Runnable{
 	        case "/level_1.png":
 	        	this.currentLevel = "/level_2.png";
 	          	this.music.setSong("songs/boss.wav");
-	        	this.music.play();
+	        	this.music.playSong(true);
+	        	this.HP = this.player.getHP();
+	        	this.handler.setNumberOfEnemies(enemiesInSecondsLevel);
 	        	break;
     	default:
 	        	this.currentLevel = "/level_1.png";
 	        	this.handler.startGame(false);
+	        	this.handler.setNumberOfEnemies(enemiesInFirstLevel);
 	        	this.music.setSong("songs/intro.wav");
-	        	this.music.play();
+	        	this.music.playSong(false);
+	        	this.HP = startingHP;
 	        }
     }
     
-    public static void main(String args[]) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public void nextSong(String song) {
+        if(this.music.getClip() != null) {
+        	this.music.stopSong();
+        	this.music = new MusicPlayer(handler);
+        	this.music.setSong(song);
+        	this.music.playSong(true);
+        }
+    }
+    public static void main(String args[]) {
         Game game = new Game();
 
     }

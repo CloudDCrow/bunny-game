@@ -13,11 +13,11 @@ public class Player extends GameObject{
     private long lastCollision;
     private MusicPlayer music;
     		
-    public Player(int x, int y, ID id, Handler handler, Sprites sprite) {
+    public Player(int x, int y, ID id, int HP, Handler handler, Sprites sprite) {
         super(x, y, id, sprite);
         this.handler = handler;
         this.playerSprite = sprite.getSubimage(1, 1, 32, 48);
-        this.HP = 200;
+        this.HP = HP;
         music = new MusicPlayer(handler);
     }
     
@@ -90,7 +90,7 @@ public class Player extends GameObject{
     				System.currentTimeMillis() - lastCollision > 2000) {
     				loseHP();
     				this.music.setSong("songs/scream.wav");
-    				this.music.play();
+    				this.music.playSong(false);
             		lastCollision = System.currentTimeMillis();
     			}
     		}
@@ -100,7 +100,7 @@ public class Player extends GameObject{
     			if(getBounds().intersects(tempObject.getBounds())) {
     				gainHP(50);
     				this.music.setSong("songs/drink.wav");
-    				this.music.play();
+    				this.music.playSong(false);
     			}
     		}
     	}

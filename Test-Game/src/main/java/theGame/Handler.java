@@ -6,9 +6,14 @@ import java.util.*;
 
 public class Handler {
     
-    ArrayList<GameObject> object = new ArrayList<>();
+    ArrayList<GameObject> object;
     
-    private int numberOfEnemies = 1;
+    private int numberOfEnemies;
+    
+    public Handler() {
+    	this.object = new ArrayList<>();
+    	this.numberOfEnemies = 15;
+    }
     
     private boolean up = false,
                     down = false,
@@ -31,9 +36,14 @@ public class Handler {
     	return numberOfEnemies <= 0;
     }
     
-    public void resetEnemies() {
-    	this.numberOfEnemies = 1;
+    public void setNumberOfEnemies(int amount) {
+    	this.numberOfEnemies = amount;
     }
+    
+    public void resetEnemies(int amount) {
+    	this.numberOfEnemies = amount;
+    }
+    
     public void tick() {
     	for(int i = 0; i < this.object.size(); i++) {
     		GameObject obj = this.object.get(i);
