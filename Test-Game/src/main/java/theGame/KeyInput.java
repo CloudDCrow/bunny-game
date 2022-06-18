@@ -101,6 +101,7 @@ public class KeyInput extends KeyAdapter{
                 
                 if(key == KeyEvent.VK_R) handler.resetGame(true);
                 if(key == KeyEvent.VK_E) handler.nextLevel(true);
+                if(key == KeyEvent.VK_ENTER) handler.startGame(true);
             }
         }
     }

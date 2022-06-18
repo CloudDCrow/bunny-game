@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 public class Game extends Canvas implements Runnable{
     
     private boolean isRunning = false;
+    private boolean inIntro = true;
     private Thread thread;
     private Handler handler;
     private BufferedImage level = null;
@@ -40,23 +41,23 @@ public class Game extends Canvas implements Runnable{
         window.start();
         this.start();
         this.currentLevel = "/level_1.png";
-        this.currentSong = "songs/level-1-song.wav";
+        this.currentSong = "songs/intro.wav";
         
         this.handler = new Handler();
         this.camera = new Camera(0, 0);
         this.music = new MusicPlayer(handler);
+        this.music.setSong(currentSong); 
+        this.music.play();
        
         this.loader = new BufferedImageLoader();
-        this.level = loader.loadImage(currentLevel);
         this.sprites = loader.loadImage("/sprite-sheet.png");
-        this.music.setSong(currentSong);   
+        this.level = loader.loadImage(currentLevel);
+
        
         this.spriteSheet = new Sprites(sprites);
         this.addKeyListener(new KeyInput(handler, spriteSheet));
-        
+    	
         this.loadLevel(level);
-        this.music.play();
-        this.music.loop();
     }
     
     private void start() {
@@ -96,9 +97,20 @@ public class Game extends Canvas implements Runnable{
            //updates++;
            delta--;
           }
-		
+          
+         
           render();
-
+          
+          if(this.music.getClip() != null) {
+              if(inIntro)  {
+            	  this.music.stop();
+            	  this.music = new MusicPlayer(handler);
+            	  this.music.setSong("songs/level-1-song.wav");
+            	  this.music.play();
+            	  inIntro = false;
+              }}
+    		
+          
           frames++;
 
           if (System.currentTimeMillis() - timer > 1000) {
@@ -115,27 +127,39 @@ public class Game extends Canvas implements Runnable{
 /////////////////////////////////////////////
     
     public void tick() {
-    	
+
+    	//Update Camera
+////////////////////////////////////////////////////////////////////
+
 		for(int i = 0; i < handler.object.size(); i++) {
 			
 			if(handler.object.get(i).getID() == ID.Player) {
 				this.camera.tick(this.handler.object.get(i));
 			}
 		}
+////////////////////////////////////////////////////////////////////
 		
+		//Reset from start
+////////////////////////////////////////////////////////////////////
+
         if(this.player != null & this.handler.toReset()) {
       	  if(this.player.isDead()) {
       		  this.handler.removeAllObjects();
       		  this.handler.resetEnemies();
+              this.level = loader.loadImage(currentLevel);
       		  this.loadLevel(level);
       	  }
-        }
+        }  
+////////////////////////////////////////////////////////////////////
+
+        //Go to next level
+////////////////////////////////////////////////////////////////////
         
-   	 if(handler.roomCleared() & this.handler.canGoToNextLevel()) {
-   		
-        nextLevelLoader();
-   	 }
-        
+        if(handler.roomCleared() & this.handler.canGoToNextLevel()) {
+        	nextLevelLoader();
+   	 	}
+////////////////////////////////////////////////////////////////////
+
 	    this.handler.tick();
     }
     
@@ -162,10 +186,12 @@ public class Game extends Canvas implements Runnable{
         
         g2d.translate(camera.getX(), camera.getY());
         
-        g.setColor(Color.gray);
-        g.fillRect(5, 5, 200, 20);
+        introScreen(g, bs);
+        
         
     	if(this.player != null) {
+            g.setColor(Color.gray);
+            g.fillRect(5, 5, 200, 20);
             g.setColor(Color.black);
             g.setFont(new Font("Ink Free", Font.BOLD, 20));
             g.drawString("HP: " + this.player.getHP(), 5, 40);
@@ -180,6 +206,36 @@ public class Game extends Canvas implements Runnable{
         g.dispose();
         bs.show();
     }
+    
+    public void introScreen(Graphics g,  BufferStrategy bs) {
+    	while(!this.handler.canStart() && this.currentLevel.equals("/level_1.png")) {
+    		this.inIntro = true;
+			g.setColor(Color.gray);
+			g.fillRect(0, 0, 1000, 563);
+			g.setColor(Color.orange);
+		    g.setFont(new Font("Ink Free", Font.BOLD, 75));
+			FontMetrics metrics = getFontMetrics(g.getFont());
+			g.drawString("FireBunny Adventure", (SCREEN_WIDTH - metrics.stringWidth("FireBunny Adventure"))/2, SCREEN_HEIGHT/2 - 50);
+	        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+			g.setColor(Color.white);
+			FontMetrics metrics2 = getFontMetrics(g.getFont());
+	    	g.drawString("Press 'Enter' to start",(SCREEN_WIDTH - metrics2.stringWidth("Press 'Enter' to start"))/2, SCREEN_HEIGHT/2);
+		
+	        g.dispose();
+	        bs.show();
+    	}
+    }
+    
+    public void creditsScreen(Graphics g) {
+    	g.setColor(Color.black);
+		g.fillRect(0, 0, 1000, 563);
+		g.setColor(Color.green);
+	    g.setFont(new Font("Ink Free", Font.BOLD, 75));
+		FontMetrics metrics = getFontMetrics(g.getFont());
+		g.drawString("YEY", (SCREEN_WIDTH - metrics.stringWidth("YEY"))/2, SCREEN_HEIGHT/2 - 50);
+        g.dispose();
+    }
+    
     public void roomClearedScreen(Graphics g) {
     	
     	if(this.handler.roomCleared()) {
@@ -214,6 +270,7 @@ public class Game extends Canvas implements Runnable{
     private void loadLevel(BufferedImage image) {
     	int width = image.getWidth();
     	int height = image.getHeight();
+    	
 
     	for(int i = 0; i < width; i++) {
     		for(int j = 0; j < height; j++) {
@@ -265,7 +322,8 @@ public class Game extends Canvas implements Runnable{
 	        	break;
     	default:
 	        	this.currentLevel = "/level_1.png";
-	        	this.music.setSong("songs/level-1-song.wav");
+	        	this.handler.startGame(false);
+	        	this.music.setSong("songs/intro.wav");
 	        	this.music.play();
 	        }
     }

@@ -24,6 +24,10 @@ public class Player extends GameObject{
     @Override
     public void tick() {
     	
+    	if(isDead()) {
+            this.playerSprite = sprite.getSubimage(10, 1, 32, 48);
+    	}
+    	
         if(!isDead()) {
         	if(!this.handler.roomCleared()) {
         		
@@ -57,9 +61,13 @@ public class Player extends GameObject{
 		        }else if(!handler.isLeft()){
 		            velX = 0;
 		        }
-        	}	
+        	}
+        	
+    		if(this.handler.roomCleared()) {
+    			this.playerSprite = sprite.getSubimage(11, 1, 32, 48);
+    		}
         }
-    }   
+    }	   
 /////////////////////////////////////////
     
     private void collision() {

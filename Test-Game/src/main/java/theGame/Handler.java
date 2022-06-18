@@ -20,6 +20,7 @@ public class Handler {
 				    goingRight = false,
     				muted = true,
     				proceed = false,
+    				begin = false,
     				reset = false;
 
     public void enemyKiled() {
@@ -31,7 +32,7 @@ public class Handler {
     }
     
     public void resetEnemies() {
-    	this.numberOfEnemies = 99;
+    	this.numberOfEnemies = 1;
     }
     public void tick() {
     	for(int i = 0; i < this.object.size(); i++) {
@@ -158,5 +159,13 @@ public class Handler {
 	
 	public boolean canGoToNextLevel() {
 		return this.proceed;
+	}
+	
+	public void startGame(boolean begin) {
+		this.begin = begin;
+	}
+	
+	public boolean canStart() {
+		return this.begin;
 	}
 }

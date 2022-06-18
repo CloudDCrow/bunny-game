@@ -60,4 +60,8 @@ public class MusicPlayer {
 		   }
 		 }
 	}
+	
+	public Clip getClip() {
+		return this.clip;
+	}
 }
