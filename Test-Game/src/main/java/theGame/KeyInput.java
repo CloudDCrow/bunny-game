@@ -4,13 +4,16 @@ import java.awt.event.*;
 
 public class KeyInput extends KeyAdapter{
     
+    private long lastKeyPress;
+
     private Handler handler;
     private Sprites sprite;
-    private long lastKeyPress;
+    
     
     public KeyInput(Handler handler, Sprites sprite) {
         this.handler = handler;
         this.sprite = sprite;
+        this.lastKeyPress = 0;
     }
  
     public void keyPressed(KeyEvent e) {
@@ -26,66 +29,91 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_UP)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
-            		handler.setGoUp(true);
-            		
-            		Projectile bullet = new Projectile(tempObject.getX()+10,
-      						 tempObject.getY(),
-       						 ID.Projectile, handler, 0, 0, sprite);
+            			if(!this.handler.playerIsDead()) {
 
-            		handler.addObject(bullet);
-            		lastKeyPress = System.currentTimeMillis();
-            		break;
+		            		handler.setGoUp(true);
+		            		
+		            		if(this.handler.getPP() > 0) {
+			            		Projectile bullet = new Projectile(tempObject.getX()+10,
+			      						 tempObject.getY(),
+			       						 ID.Projectile, handler, 0, 0, sprite);
+			            		handler.losePP();
+			            		handler.addObject(bullet);
+			            		lastKeyPress = System.currentTimeMillis();
+			            			
+		            		}
+		            		break;
+            			}
             		}
             	}
             	
             	if(key == (KeyEvent.VK_LEFT)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
+            			if(!this.handler.playerIsDead()) {
 
-            		this.handler.setGoLeft(true);
 
-            		Projectile bullet = new Projectile(tempObject.getX()+2,
-      						 tempObject.getY()+34,
-       						 ID.Projectile, handler, 0, 0, sprite);
-
-            		this.handler.addObject(bullet);
-            		lastKeyPress = System.currentTimeMillis();
-
-            		break;
+		            		this.handler.setGoLeft(true);
+		            		
+		            		if(this.handler.getPP() > 0) {
+			            		Projectile bullet = new Projectile(tempObject.getX()+2,
+			      						 tempObject.getY()+34,
+			       						 ID.Projectile, handler, 0, 0, sprite);
+			            		
+			            		handler.losePP();
+			            		this.handler.addObject(bullet);
+			            		lastKeyPress = System.currentTimeMillis();
+			            	}
+		            		
+		            		break;
+            			}
             		}
             	}
             	
             	if(key == (KeyEvent.VK_DOWN)) {
-            		if(System.currentTimeMillis() - lastKeyPress > 150 &&
+            		if((System.currentTimeMillis() - lastKeyPress > 150) &&
             				!this.handler.roomCleared()) {
+            			if(!this.handler.playerIsDead()) {
 
-            		this.handler.setGoDown(true);
-
-            		Projectile bullet = new Projectile(tempObject.getX()+10,
-      						 tempObject.getY()+34,
-       						 ID.Projectile, handler, 0, 0, sprite);
-
-            		handler.addObject(bullet);
-            		lastKeyPress = System.currentTimeMillis();
-
-            		break;
+		            		this.handler.setGoDown(true);
+		
+		            		if(this.handler.getPP() > 0) {
+		
+			            		Projectile bullet = new Projectile(tempObject.getX()+10,
+			      						 tempObject.getY()+34,
+			       						 ID.Projectile, handler, 0, 0, sprite);
+			            		
+			            		handler.losePP();
+			            		handler.addObject(bullet);
+			            		lastKeyPress = System.currentTimeMillis();
+		            		}
+		            		
+		            		break;
+            			}
             		}
             	}
             	
             	if(key == (KeyEvent.VK_RIGHT)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
-            			
-            		this.handler.setGoRight(true);
+            			if(!this.handler.playerIsDead()) {
 
-            		Projectile bullet = new Projectile(tempObject.getX()+10,
-      						 tempObject.getY()+34,
-       						 ID.Projectile, handler, 0, 0, sprite);
-
-            		handler.addObject(bullet);
-            		lastKeyPress = System.currentTimeMillis();
-
-            		break;
+		            			
+		            		this.handler.setGoRight(true);
+		
+		            		if(this.handler.getPP() > 0) {
+		
+			            		Projectile bullet = new Projectile(tempObject.getX()+10,
+			      						 tempObject.getY()+34,
+			       						 ID.Projectile, handler, 0, 0, sprite);
+			
+			            		handler.losePP();
+			            		handler.addObject(bullet);
+			            		lastKeyPress = System.currentTimeMillis();
+		            		}
+		            		
+		            		break;
+            			}
             		}
             	}
 ///////////////////////////////////////////////////////////////////////////////////
@@ -103,13 +131,16 @@ public class KeyInput extends KeyAdapter{
                 if(key == KeyEvent.VK_M) handler.muteSong(!handler.isMuted());
 ///////////////////////////////////////////////////////////////////////////////////
                 
+                //Game
+///////////////////////////////////////////////////////////////////////////////////
+
                 if(key == KeyEvent.VK_R) handler.resetGame(true);
                 if(key == KeyEvent.VK_E) handler.nextLevel(true);
                 if(key == KeyEvent.VK_ENTER) handler.startGame(true);
+///////////////////////////////////////////////////////////////////////////////////
             }
         }
-    }
-    
+    }    
     
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
@@ -119,6 +150,9 @@ public class KeyInput extends KeyAdapter{
         	
             if(tempObject.getID() == ID.Player) {            	
             	
+            	//Projectile
+///////////////////////////////////////////////////////////////////////////////////
+
             	if(key == (KeyEvent.VK_UP)) {
 
             		this.handler.setGoUp(false);
@@ -137,15 +171,24 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_RIGHT)) {
              		this.handler.setGoRight(false);
             	}
+///////////////////////////////////////////////////////////////////////////////////
+
+            	//Player
+///////////////////////////////////////////////////////////////////////////////////
             	
                 if(key == KeyEvent.VK_W) handler.setUp(false);
                 if(key == KeyEvent.VK_A) handler.setLeft(false);
                 if(key == KeyEvent.VK_S) handler.setDown(false);
                 if(key == KeyEvent.VK_D) handler.setRight(false);
-                
+///////////////////////////////////////////////////////////////////////////////////
+
+              //Game
+///////////////////////////////////////////////////////////////////////////////////
+
                 if(key == KeyEvent.VK_R) handler.resetGame(false);
                 if(key == KeyEvent.VK_E) handler.nextLevel(false);
+///////////////////////////////////////////////////////////////////////////////////
             }
         }
-    }   
+    }
 }

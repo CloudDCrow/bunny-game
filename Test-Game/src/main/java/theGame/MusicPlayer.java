@@ -1,14 +1,11 @@
 package theGame;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Scanner;
+
+import java.net.URL; 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+
 
 public class MusicPlayer {
 	
@@ -22,20 +19,27 @@ public class MusicPlayer {
 	public void setSong(String song) {
 			
 		try {
-		URL url = this.getClass().getResource(song);
-		AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
-		this.clip = AudioSystem.getClip();
-		this.clip.open(audioStream);
+			URL url = this.getClass().getResource(song);
+			AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
+			this.clip = AudioSystem.getClip();
+			this.clip.open(audioStream);
 
 		} catch(Exception e) {	
 		}
 	}
 	
 	public void playSong(boolean loop) {
-		this.clip.start();
-		if(loop) {
-			loop();
-		}
+
+		if(clip != null) {
+			if(handler.isMuted()) {
+				   this.clip.stop();
+			   }
+			
+			if(!handler.isMuted()) {
+					this.clip.start();
+					if(loop) loop();
+			}
+		} 
 	}
 	
 	public boolean songIsPlaying() {
@@ -46,25 +50,24 @@ public class MusicPlayer {
 		this.clip.stop();
 	}
 	
+	public Clip getClip() {
+		return this.clip;
+	}
+	
 	public void loop() {
 		this.clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
-	public void mute() {
-		
-		while(true) {			   
+	public void checkMute() {
+		if(clip != null) {
 			if(handler.isMuted()) {
-			   this.clip.stop();
-		   }
-		   
+				   this.clip.stop();
+			   }
+			   
 			if(!handler.isMuted()) {
 				this.clip.start();
-				this.clip.loop(Clip.LOOP_CONTINUOUSLY);
-		   }
-		 }
-	}
-	
-	public Clip getClip() {
-		return this.clip;
+				loop();				
+		   	}
+		} 
 	}
 }

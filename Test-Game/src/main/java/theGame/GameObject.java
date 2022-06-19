@@ -1,11 +1,12 @@
 package theGame;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public abstract class GameObject {
     
     protected int x, y;
-    public float velX = 0, velY = 0;
+    protected float velX = 0, velY = 0;
     protected ID id;
     protected Sprites sprite;
 
@@ -19,7 +20,6 @@ public abstract class GameObject {
     public abstract void tick();
     public abstract void render(Graphics g);
     public abstract Rectangle getBounds();
-
 
     //Getters and Setters
 ////////////////////////////////////////
@@ -62,8 +62,6 @@ public abstract class GameObject {
 
     public void setID(ID newID) {
         this.id = newID;
-    }
-    
-////////////////////////////////////////
-    
+    }    
 }
+////////////////////////////////////////

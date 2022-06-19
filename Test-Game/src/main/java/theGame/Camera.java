@@ -11,6 +11,7 @@ public class Camera {
 	}
 	
 	public void tick(GameObject object) {
+		
 		x += ((object.getX() - x) - 1000/2) * 0.2f;
 		y += ((object.getY() - y) - 563/2) * 0.2f;
 		
@@ -49,7 +50,5 @@ public class Camera {
 	public void setY(float y) {
 		this.y = y;
 	}
-	
-/////////////////////////////////////
-	
 }
+/////////////////////////////////////

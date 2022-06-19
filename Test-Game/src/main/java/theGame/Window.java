@@ -1,14 +1,16 @@
 package theGame;
 
-import java.awt.Dimension;
-
+import java.awt.Dimension; 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-public class Window {
+@SuppressWarnings("serial")
+public class Window extends JFrame{
+	
     private final int width, height;
     private final String title;
     private final Game game;
+    
     private JFrame frame;
     private ImageIcon icon;
 
@@ -22,7 +24,7 @@ public class Window {
 
     public void start() {
         
-        this.frame = new JFrame(title);
+        frame = new JFrame(title);
         
         frame.setPreferredSize(new Dimension(width, height));
         frame.setMaximumSize(new Dimension(width, height));

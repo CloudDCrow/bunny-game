@@ -1,6 +1,5 @@
 package theGame;
 
-import java.awt.Color;   
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -8,31 +7,38 @@ import java.util.Random;
 
 public class Enemy extends GameObject{
 	
+	private boolean changedMovement;
+    public boolean gotHit;
+	private int velX = 0;
+	private int velY = 0;
+	private int count = 0;
+	private int HP = 0;
+    private long lastHit;
 
 	private Handler handler;
 	private Random rng = new Random();
-	private int velX = 0;
-	private int velY = 0;
-	private boolean changedMovement = false;
-	private int count = 0;
-	private int HP = 0;
 	private BufferedImage enemySprite;
     private MusicPlayer music;
 
 	
 	public Enemy(int x, int y, ID id, Handler handler, Sprites sprite) {
 		super(x, y, id, sprite);
-		this.handler = handler;
+		this.gotHit = false;
+		this.changedMovement = false;
 		this.HP = 200;
-        music = new MusicPlayer(handler);
 		this.velX = rng.nextInt(3 + 2) - 2;
 		this.velY = rng.nextInt(3 + 2) - 2;
+
+		this.handler = handler;
+        this.music = new MusicPlayer(handler);
+
 		this.enemySprite = sprite.getSubimage(12, 1, 32, 16);
 	}
 	
 	@Override
 	public void tick() {
 
+		//Sprite commands
 		if(velX <= 0) {
 			this.enemySprite = sprite.getSubimage(12, 1, 32, 16);
 		}
@@ -41,11 +47,20 @@ public class Enemy extends GameObject{
 			this.enemySprite = sprite.getSubimage(13, 1, 32, 16);
 		}
 		
+		if(velX <= 0 && System.currentTimeMillis() - lastHit < 500) {
+			this.enemySprite = sprite.getSubimage(14, 1, 32, 16);
+		}
+		
+		if(velX >= 0 && System.currentTimeMillis() - lastHit < 500) {
+			this.enemySprite = sprite.getSubimage(15, 1, 32, 16);
+		}
+		
+
 		this.x += velX;
 		this.y += velY;
 		collision();
 
-		
+		//Movement logic
 		if((changedMovement & count == 14) || velX == 0 || velY == 0 || count == 100) {
 			this.velX = rng.nextInt(3 + 2) - 2;
 			this.velY = rng.nextInt(3 + 2) - 2;
@@ -59,8 +74,6 @@ public class Enemy extends GameObject{
 		}
 		
 		count++;
-		
-
 	}
 	
 	public void collision() {
@@ -68,20 +81,25 @@ public class Enemy extends GameObject{
 			GameObject tempObject = handler.object.get(i);
 			
 			if(tempObject.getID() == ID.Projectile) {
+				
 				if(getBounds().intersects(tempObject.getBounds())) {
-					handler.removeObject(tempObject);
+					this.handler.removeObject(tempObject);
+            		this.lastHit = System.currentTimeMillis();
 					this.HP -= 100;
 					if(this.HP == 0) {
 						this.handler.enemyKiled();
 						this.music.setSong("songs/OOF.wav");
 	    				this.music.playSong(false);
-						handler.removeObject(this);
+						this.handler.removeObject(this);
 					}
 				}
 			}
 			
 			if(tempObject.getID() == ID.Block) {
+				
 				if(getLargeBounds().intersects(tempObject.getBounds())) {
+					
+					//Hitting wall logic
 					count = 0;
 					changedMovement = true;
 					
@@ -92,13 +110,8 @@ public class Enemy extends GameObject{
 	    				velY = velY * -1;
 				}
 			}
-			
-			if(tempObject.getID() == ID.Player) {
-				if(getLargeBounds().intersects(tempObject.getBounds())) {
-					
-				}
-			}
 		}
+		
 	}
 
 	@Override
