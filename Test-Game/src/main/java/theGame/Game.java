@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Game extends Canvas implements Runnable{
 	
     private final int SCREEN_WIDTH = 1000;
-    private final int SCREEN_HEIGHT = 563;
+    private final int SCREEN_HEIGHT = 580;
     private final int startingHP = 200;
     private final int enemiesInFirstLevel = 2;
     private final int enemiesInSecondsLevel = 1;
@@ -25,6 +25,7 @@ public class Game extends Canvas implements Runnable{
 
     private boolean isRunning = false;
     private boolean inIntro = true;
+    private boolean inCredits = false;
     private String currentLevel;
     private String currentSong;
     private int HP;
@@ -140,7 +141,12 @@ public class Game extends Canvas implements Runnable{
 	    	if(inIntro)  {
 	    		nextSong("songs/level-1-song.wav");
 	    		inIntro = false;
-	    	}		
+	    	}
+	    	
+	    	if(inCredits)  {
+	    		nextSong("songs/OOF.wav");
+	    		inIntro = false;
+	    	}	
 	          
 	    	frames++;
 	
@@ -231,6 +237,7 @@ public class Game extends Canvas implements Runnable{
             healthBar(g);
             gameOverScreen(g);
             roomClearedScreen(g);
+            creditsScreen(g);
     	}        
                 
         g.dispose();
@@ -310,13 +317,24 @@ public class Game extends Canvas implements Runnable{
     }
     
     public void creditsScreen(Graphics g) {
-    	g.setColor(Color.black);
-		g.fillRect(0, 0, 1000, 563);
-		g.setColor(Color.green);
-	    g.setFont(new Font("Ink Free", Font.BOLD, 75));
-		FontMetrics metrics = getFontMetrics(g.getFont());
-		g.drawString("YEY", (SCREEN_WIDTH - metrics.stringWidth("YEY"))/2, SCREEN_HEIGHT/2 - 50);
-        g.dispose();
+    	
+    	if(this.handler.roomCleared() & this.currentLevel == "/level_2.png") {
+
+    		this.inCredits = true;
+    		
+	    	g.setColor(Color.black);
+			g.fillRect(0, 0, 1000, 563);
+			g.setColor(Color.green);
+		    g.setFont(new Font("Ink Free", Font.BOLD, 75));
+			FontMetrics metrics = getFontMetrics(g.getFont());
+			g.drawString("VICTORY!", (SCREEN_WIDTH - metrics.stringWidth("VICTORY!"))/2, SCREEN_HEIGHT/2 - 50);
+			g.setFont(new Font("Ink Free", Font.BOLD, 20));
+	        g.setColor(Color.white);
+			FontMetrics metrics2 = getFontMetrics(g.getFont());
+	    	g.drawString("Press 'E' to restart",(SCREEN_WIDTH - metrics2.stringWidth("Press 'E' to restart"))/2, SCREEN_HEIGHT/2);
+		
+			g.dispose();
+    	}
     }
     
     public void roomClearedScreen(Graphics g) {
