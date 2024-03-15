@@ -1,3 +1,3 @@
-# Test-Game
+# Bunny Game
 
-A simple game to test github and its functions.
+A simple game made in java.
