@@ -48,29 +48,21 @@ public class Player extends GameObject{
 	        //Player movements
 /////////////////////////////////////////
 
-	        if(handler.isUp()) {
-	            velY = -5;
-	        } else if(!handler.isDown()) {
-	            velY = 0;
-	        }
-	        
-	        if(handler.isDown()) {
-	            velY = 5;
-	        }else if(!handler.isUp()) {
-	            velY = 0;
-	        }
-	        
-	        if(handler.isLeft()) {
-	            velX = -5;
-	        }else if(!handler.isRight()) {
-	            velX = 0;
-	        }
-	        
-	        if(handler.isRight()) {
-	            velX = 5;
-	        }else if(!handler.isLeft()){
-	            velX = 0;
-	        }
+			if (handler.isUp()) {
+				velY = -5;
+			} else if (handler.isDown()) {
+				velY = 5;
+			} else {
+				velY = 0;
+			}
+
+			if (handler.isLeft()) {
+				velX = -5;
+			} else if (handler.isRight()) {
+				velX = 5;
+			} else {
+				velX = 0;
+			}
     	}
     }   
     
@@ -79,17 +71,25 @@ public class Player extends GameObject{
     	for(int i = 0; i < handler.object.size() ; i++) {
     		GameObject tempObject = handler.object.get(i);
     		
-    		if(tempObject.getID() == ID.Block) {	
-    			
-    			if(getBounds().intersects(tempObject.getBounds())) {
+    		if(tempObject.getID() == ID.Block || tempObject.getID() == ID.Rock) {
 
-				//Stops when hitting wall
-    				this.x += velX * -1;
-    				this.y += velY * -1;
-    			}
+				if(tempObject.getID() == ID.Block || tempObject.getID() == ID.Rock) {
+
+					// Horizontal collision
+					if(getBoundsHorizontal().intersects(tempObject.getBounds())) {
+						this.x += velX * -1;
+						velX = 0;
+					}
+
+					// Vertical collision
+					if(getBoundsVertical().intersects(tempObject.getBounds())) {
+						this.y += velY * -1;
+						velY = 0;
+					}
+				}
     		}
     		
-			if(tempObject.getID() == ID.Enemy) {	
+			if(tempObject.getID() == ID.Bug || tempObject.getID() == ID.Crab) {
     			
     			if(getBounds().intersects(tempObject.getBounds()) &
     				System.currentTimeMillis() - lastCollision > 2000) {
@@ -110,6 +110,15 @@ public class Player extends GameObject{
     		}
     	}
     }
+	//Horizontal and Vertical logic
+/////////////////////////////////////////
+	private Rectangle getBoundsHorizontal() {
+		return new Rectangle((int)(x + velX), (int)y, 32, 46);
+	}
+
+	private Rectangle getBoundsVertical() {
+		return new Rectangle((int)x, (int)(y + velY), 32, 46);
+	}
     
     //HP commands
 /////////////////////////////////////////

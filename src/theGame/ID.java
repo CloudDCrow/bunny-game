@@ -3,8 +3,12 @@ package theGame;
 public enum ID {
     Player(),
     Projectile(),
-    Enemy(),
+    Bug(),
+    Crab(),
+    Boss(),
     Ball(),
     Block(),
+    Bush(),
+    Rock(),
     Potion();
 }
