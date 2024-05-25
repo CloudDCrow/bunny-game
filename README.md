@@ -1,3 +1,3 @@
 # Bunny Game
 
-A simple game made in java.
+A simple game made in java. (In progress)
