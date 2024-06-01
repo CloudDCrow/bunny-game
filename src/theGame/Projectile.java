@@ -36,7 +36,7 @@ public class Projectile extends GameObject {
     	for(int i = 0; i < handler.object.size() - 1; i++) {
     		GameObject tempObject = handler.object.get(i);
     		
-    		if(tempObject.getID() == ID.Block) {	
+    		if(tempObject.getID() == ID.Block || tempObject.getID() == ID.Rock || tempObject.getID() == ID.Gold) {
     			
     			if(getBounds().intersects(tempObject.getBounds())) {
     				handler.removeObject(this);

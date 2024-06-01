@@ -1,11 +1,10 @@
 package theGame;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class Boss extends GameObject {
+public class Clone extends GameObject{
     private boolean changedMovement;
     public boolean gotHit;
     private int velX;
@@ -20,18 +19,18 @@ public class Boss extends GameObject {
     private final MusicPlayer music;
 
 
-    public Boss(int x, int y, ID id, Handler handler, Sprites sprite) {
+    public Clone(int x, int y, ID id, Handler handler, Sprites sprite) {
         super(x, y, id, sprite);
         this.gotHit = false;
         this.changedMovement = false;
-        this.HP = 1500;
-        this.velX = rng.nextInt(8 + 6) - 6;
-        this.velY = rng.nextInt(8 + 6) - 6;
+        this.HP = 100;
+        this.velX = rng.nextInt(6 + 4) - 4;
+        this.velY = rng.nextInt(6 + 4) - 4;
 
         this.handler = handler;
         this.music = new MusicPlayer(handler);
 
-        this.bossSprite = sprite.getSubimage(18, 1, 32, 64);
+        this.bossSprite = sprite.getSubimage(19, 1, 32, 64);
     }
 
     @Override
@@ -39,19 +38,19 @@ public class Boss extends GameObject {
 
         //Sprite commands
         if(velX <= 0) {
-            this.bossSprite = sprite.getSubimage(18, 1, 32, 64);
+            this.bossSprite = sprite.getSubimage(19, 1, 32, 64);
         }
 
         if(velX >= 0) {
-            this.bossSprite = sprite.getSubimage(18, 1, 32, 64);
+            this.bossSprite = sprite.getSubimage(19, 1, 32, 64);
         }
 
         if(velX <= 0 && System.currentTimeMillis() - lastHit < 500) {
-            this.bossSprite = sprite.getSubimage(18, 1, 32, 64);
+            this.bossSprite = sprite.getSubimage(19, 1, 32, 64);
         }
 
         if(velX >= 0 && System.currentTimeMillis() - lastHit < 500) {
-            this.bossSprite = sprite.getSubimage(18, 1, 32, 64);
+            this.bossSprite = sprite.getSubimage(19, 1, 32, 64);
         }
 
 
@@ -61,15 +60,15 @@ public class Boss extends GameObject {
 
         //Movement logic
         if((changedMovement & count == 14) || velX == 0 || velY == 0 || count == 100) {
-            this.velX = rng.nextInt(8 + 6) - 6;
-            this.velY = rng.nextInt( 8+ 6) - 6;
+            this.velX = rng.nextInt(6 + 4) - 4;
+            this.velY = rng.nextInt(6 + 4) - 4;
             changedMovement = false;
             count = 0;
         }
 
         while(velX == 0 || velY == 0) {
-            this.velX = rng.nextInt(8 + 6) - 6;
-            this.velY = rng.nextInt(8 + 6) - 6;
+            this.velX = rng.nextInt(6 + 4) - 4;
+            this.velY = rng.nextInt(6 + 4) - 4;
         }
 
         count++;
@@ -86,10 +85,10 @@ public class Boss extends GameObject {
                     this.lastHit = System.currentTimeMillis();
                     this.HP -= 100;
                     if(this.HP == 0) {
-                        this.handler.enemyKilled();
                         this.music.setSong("/OOF.wav");
                         this.music.playSong(false);
                         this.handler.removeObject(this);
+                        this.handler.gainPP(20);
                     }
                 }
             }

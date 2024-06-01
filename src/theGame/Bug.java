@@ -9,16 +9,16 @@ public class Bug extends GameObject{
 	
 	private boolean changedMovement;
     public boolean gotHit;
-	private int velX = 0;
-	private int velY = 0;
+	private int velX;
+	private int velY;
 	private int count = 0;
-	private int HP = 0;
+	private int HP;
     private long lastHit;
 
-	private Handler handler;
-	private Random rng = new Random();
+	private final Handler handler;
+	private final Random rng = new Random();
 	private BufferedImage bugSprite;
-    private MusicPlayer music;
+    private final MusicPlayer music;
 
 	
 	public Bug(int x, int y, ID id, Handler handler, Sprites sprite) {
@@ -75,43 +75,42 @@ public class Bug extends GameObject{
 		
 		count++;
 	}
-	
+
 	public void collision() {
 		for(int i = 0; i < handler.object.size(); i++) {
 			GameObject tempObject = handler.object.get(i);
-			
+
 			if(tempObject.getID() == ID.Projectile) {
-				
+
 				if(getBounds().intersects(tempObject.getBounds())) {
 					this.handler.removeObject(tempObject);
             		this.lastHit = System.currentTimeMillis();
 					this.HP -= 100;
 					if(this.HP == 0) {
-						this.handler.enemyKiled();
+						this.handler.enemyKilled();
 						this.music.setSong("/OOF.wav");
 	    				this.music.playSong(false);
 						this.handler.removeObject(this);
 					}
 				}
 			}
-			
+
 			if(tempObject.getID() == ID.Block) {
-				
+
 				if(getLargeBounds().intersects(tempObject.getBounds())) {
-					
+
 					//Hitting wall logic
 					count = 0;
 					changedMovement = true;
-					
+
 						this.x += this.velX *-1;
 	    				this.y += this.velY * -1;
-	    				
+
 	    				velX = velX * -1;
 	    				velY = velY * -1;
 				}
 			}
 		}
-		
 	}
 
 	@Override

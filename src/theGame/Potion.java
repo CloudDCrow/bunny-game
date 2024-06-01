@@ -13,7 +13,7 @@ public class Potion extends GameObject{
 
 	public Potion(int x, int y, ID id, Handler handler, Sprites sprite) {
 		super(x, y, id, sprite);
-		this.HP = 30;
+		this.HP = 20;
 
 		this.handler = handler;
 		this.potionSprite = sprite.getSubimage(4, 2, 20, 25);

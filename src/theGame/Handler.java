@@ -88,7 +88,7 @@ public class Handler {
 	}
 	
 	public boolean playerIsDead() {
-		return this.playerIsDead;
+		return !this.playerIsDead;
 	}    
     
     //Projectile commands
@@ -163,7 +163,7 @@ public class Handler {
 	public boolean canStart() {
 		return this.begin;
 	}
-   public void enemyKiled() {
+   public void enemyKilled() {
     	this.numberOfEnemies--;
     }
     
@@ -180,7 +180,10 @@ public class Handler {
     }
     
     public void losePP() {
-    	this.PP--;
+    	this.PP -= 10;
+		if(this.PP == 0) {
+			this.playerDied(true);
+		}
     }
     
     public void gainPP(int amount) {

@@ -6,9 +6,10 @@ public enum ID {
     Bug(),
     Crab(),
     Boss(),
-    Ball(),
+    Clone(),
     Block(),
     Bush(),
     Rock(),
+    Gold(),
     Potion();
 }

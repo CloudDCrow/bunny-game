@@ -8,25 +8,25 @@ import java.util.Random;
 public class Crab extends GameObject{
     private boolean changedMovement;
     public boolean gotHit;
-    private int velX = 0;
-    private int velY = 0;
+    private int velX;
+    private int velY;
     private int count = 0;
-    private int HP = 0;
+    private int HP;
     private long lastHit;
 
-    private Handler handler;
-    private Random rng = new Random();
+    private final Handler handler;
+    private final Random rng = new Random();
     private BufferedImage crabSprite;
-    private MusicPlayer music;
+    private final MusicPlayer music;
 
 
     public Crab(int x, int y, ID id, Handler handler, Sprites sprite) {
         super(x, y, id, sprite);
         this.gotHit = false;
         this.changedMovement = false;
-        this.HP = 400;
-        this.velX = rng.nextInt(3 + 2) - 2;
-        this.velY = rng.nextInt(3 + 2) - 2;
+        this.HP = 600;
+        this.velX = rng.nextInt(4 + 3) - 3;
+        this.velY = rng.nextInt(4 + 3) - 3;
 
         this.handler = handler;
         this.music = new MusicPlayer(handler);
@@ -38,38 +38,32 @@ public class Crab extends GameObject{
     public void tick() {
 
         //Sprite commands
-        if(velX <= 0) {
+        if(System.currentTimeMillis() / 1000 % 2 == 0) {
             this.crabSprite = sprite.getSubimage(12, 2, 64, 32);
-        }
-
-        if(velX >= 0) {
-            this.crabSprite = sprite.getSubimage(13, 2, 64, 32);
-        }
-
-        if(velX <= 0 && System.currentTimeMillis() - lastHit < 500) {
+        } else {
             this.crabSprite = sprite.getSubimage(14, 2, 64, 32);
+
         }
 
-        if(velX >= 0 && System.currentTimeMillis() - lastHit < 500) {
-            this.crabSprite = sprite.getSubimage(14, 2, 64, 32);
+        if(System.currentTimeMillis() - lastHit < 500) {
+            this.crabSprite = sprite.getSubimage(16, 2, 64, 32);
         }
-
 
         this.x += velX;
         this.y += velY;
         collision();
 
         //Movement logic
-        if((changedMovement & count == 14) || velX == 0 || velY == 0 || count == 100) {
-            this.velX = rng.nextInt(5 + 2) - 2;
-            this.velY = rng.nextInt(5 + 2) - 2;
+        if((changedMovement & count == 14) || velX == 0 || velY == 0 || count == 10) {
+            this.velX = rng.nextInt(4 + 3) - 3;
+            this.velY = rng.nextInt(4 + 3) - 3;
             changedMovement = false;
             count = 0;
         }
 
         while(velX == 0 || velY == 0) {
-            this.velX = rng.nextInt(3 + 2) - 2;
-            this.velY = rng.nextInt(3 + 2) - 2;
+            this.velX = rng.nextInt(4 + 3) - 3;
+            this.velY = rng.nextInt(4 + 3) - 3;
         }
 
         count++;
@@ -86,7 +80,7 @@ public class Crab extends GameObject{
                     this.lastHit = System.currentTimeMillis();
                     this.HP -= 100;
                     if(this.HP == 0) {
-                        this.handler.enemyKiled();
+                        this.handler.enemyKilled();
                         this.music.setSong("/OOF.wav");
                         this.music.playSong(false);
                         this.handler.removeObject(this);

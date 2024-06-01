@@ -29,7 +29,7 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_UP)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
-            			if(!this.handler.playerIsDead()) {
+            			if(this.handler.playerIsDead()) {
 
 		            		handler.setGoUp(true);
 		            		
@@ -50,7 +50,7 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_LEFT)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
-            			if(!this.handler.playerIsDead()) {
+            			if(this.handler.playerIsDead()) {
 
 
 		            		this.handler.setGoLeft(true);
@@ -73,7 +73,7 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_DOWN)) {
             		if((System.currentTimeMillis() - lastKeyPress > 150) &&
             				!this.handler.roomCleared()) {
-            			if(!this.handler.playerIsDead()) {
+            			if(this.handler.playerIsDead()) {
 
 		            		this.handler.setGoDown(true);
 		
@@ -96,7 +96,7 @@ public class KeyInput extends KeyAdapter{
             	if(key == (KeyEvent.VK_RIGHT)) {
             		if(System.currentTimeMillis() - lastKeyPress > 150 &&
             				!this.handler.roomCleared()) {
-            			if(!this.handler.playerIsDead()) {
+            			if(this.handler.playerIsDead()) {
 
 		            			
 		            		this.handler.setGoRight(true);

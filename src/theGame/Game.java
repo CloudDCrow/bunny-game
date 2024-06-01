@@ -19,9 +19,9 @@ public class Game extends Canvas implements Runnable{
     private final int SCREEN_WIDTH = 1000;
     private final int SCREEN_HEIGHT = 580;
     private final int STARTING_HP = 200;
-    private final int ENEMIES_IN_FIRST_LEVEL = 2;
-    //private final int enemiesInThirdLevel = 10;
-
+    public final int ENEMIES_IN_FIRST_LEVEL = 5;
+	public final int ENEMIES_IN_SECOND_LEVEL = 3;
+	public final int ENEMIES_IN_BOSS_LEVEL = 1;
     private boolean isRunning = false;
     private boolean inIntro = true;
     private boolean inCredits = false;
@@ -104,7 +104,9 @@ public class Game extends Canvas implements Runnable{
         	this.music.stopSong();
             this.music.setSong(song);
             this.music.playSong(true);
-        }
+        } else {
+			System.err.println("Music player is not initialized or clip is null.");
+		}
     }
     
     //Game loop
@@ -213,6 +215,10 @@ public class Game extends Canvas implements Runnable{
 			g.setColor(new Color(0, 180, 180));
 		} else {
 			g.setColor(new Color(150, 150, 150));
+            if(System.currentTimeMillis() % 1000 == 0) {
+                this.handler.addObject(new Clone(1000, 500, ID.Clone, handler, spriteSheet));
+            }
+
 		}
 
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -225,14 +231,14 @@ public class Game extends Canvas implements Runnable{
         
         introScreen(g, bs);
         
-        firstLevelScreen(g);
+        levelScreen(g);
         
     	if(this.player != null) {
             healthBar(g);
             gameOverScreen(g);
             roomClearedScreen(g);
             creditsScreen(g);
-    	}        
+    	}
                 
         g.dispose();
         bs.show();
@@ -296,7 +302,7 @@ public class Game extends Canvas implements Runnable{
     	}
     }
     
-    public void firstLevelScreen(Graphics g) {
+    public void levelScreen(Graphics g) {
     	
 	    	if(System.currentTimeMillis() - this.firstLevelTextTimer < 4000) {
 
@@ -304,25 +310,11 @@ public class Game extends Canvas implements Runnable{
 					g.setFont(new Font("Ink Free", Font.BOLD, 20));
 					g.setColor(new Color(255,255,255,countFirst/2));
 					FontMetrics metrics = getFontMetrics(g.getFont());
-					g.drawString("Kill all enemies",(SCREEN_WIDTH - metrics.stringWidth("Kill all enemies"))/2, 200);
+					g.drawString("Kill all enemies",(SCREEN_WIDTH - metrics.stringWidth("Kill all enemies"))/2, 150);
 	    		}
 		        countFirst--;
     		}
     }
-
-	public void secondLevelScreen(Graphics g) {
-
-		if(System.currentTimeMillis() - this.firstLevelTextTimer < 4000) {
-
-			if(countFirst > 0) {
-				g.setFont(new Font("Ink Free", Font.BOLD, 20));
-				g.setColor(new Color(255,255,255,countFirst/2));
-				FontMetrics metrics = getFontMetrics(g.getFont());
-				g.drawString("Kill 2 worms",(SCREEN_WIDTH - metrics.stringWidth("Kill 2 worms"))/2, 200);
-			}
-			countFirst--;
-		}
-	}
     
     public void creditsScreen(Graphics g) {
     	
@@ -362,7 +354,7 @@ public class Game extends Canvas implements Runnable{
     }
     public void gameOverScreen(Graphics g) {
 		
-		if(this.player.getHP() <= 0) {
+		if(this.player.getHP() <= 0 || this.handler.getPP() == 0) {
 			g.setColor(new Color(0,0,0,100));
 			g.fillRect(0, 0, 1000, 563);
 			g.setColor(Color.red);
@@ -379,7 +371,11 @@ public class Game extends Canvas implements Runnable{
     public void healthBar(Graphics g) {
     	g.setColor(Color.lightGray);
         g.fillRect(5, 5, 200, 20);
-        g.setColor(Color.black);
+        if (this.currentLevel.equals("/level_1.png")) {
+            g.setColor(Color.white);
+        } else {
+            g.setColor(Color.black);
+        }
         g.setFont(new Font("Ink Free", Font.BOLD, 20));
         g.drawString("HP: " + player.getHP(), 5, 42);
 
@@ -388,7 +384,11 @@ public class Game extends Canvas implements Runnable{
      	
      	g.setColor(Color.lightGray);
      	g.fillRect(5, 55, 200, 20);
-     	g.setColor(Color.black);
+        if (this.currentLevel.equals("/level_1.png")) {
+            g.setColor(Color.white);
+        } else {
+            g.setColor(Color.black);
+        }
      	g.setFont(new Font("Ink Free", Font.BOLD, 20));
      	g.drawString("PP: " + this.handler.getPP(), 5, 92);
      	g.setColor(new Color(0, 255, 255));
@@ -434,7 +434,7 @@ public class Game extends Canvas implements Runnable{
 						this.handler.addObject(new Boss(i*32, j*32, ID.Boss, handler, spriteSheet));
 					}
 					if(red == 255 && green == 0 && blue == 0) {
-						this.handler.addObject(new Block(i*32, j*32, ID.Block, spriteSheet));
+						this.handler.addObject(new Gold(i*32, j*32, ID.Gold, spriteSheet));
 					}
 				}
 
@@ -478,15 +478,13 @@ public class Game extends Canvas implements Runnable{
             this.music.setSong("/level-2-song.wav");
             this.music.playSong(true);
             this.HP = this.player.getHP();
-            int ENEMIES_IN_SECOND_LEVEL = 1;
             this.handler.setNumberOfEnemies(ENEMIES_IN_SECOND_LEVEL);
         } else if (this.currentLevel.equals("/level_2.png")) {
 			this.currentLevel = "/level_boss.png";
 			this.music.setSong("/boss.wav");
 			this.music.playSong(true);
 			this.HP = this.player.getHP();
-			int ENEMIES_IN_SECOND_LEVEL = 1;
-			this.handler.setNumberOfEnemies(ENEMIES_IN_SECOND_LEVEL);
+			this.handler.setNumberOfEnemies(ENEMIES_IN_BOSS_LEVEL);
 		}  else {
             this.currentLevel = "/level_1.png";
             this.music.setSong("/intro.wav");
