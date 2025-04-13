@@ -12,4 +12,12 @@ UP, DOWN, LEFT, RIGHT - Shoot projectiles
 
 Kill all enemies on each floor. 
 
+![image alt](https://github.com/CloudDCrow/bunny-game/blob/master/Sprites/java_5rxsSiuYKF.png?raw=true)
+
 Game over if all HP or PP is lost.
+
+![image alt](https://github.com/CloudDCrow/bunny-game/blob/master/Sprites/java_ydpPjCRPIg.png?raw=true)
+
+Defeat the final boss to win.
+
+![image alt](https://github.com/CloudDCrow/bunny-game/blob/master/Sprites/java_9A7ZgkcIpc.png?raw=true)
