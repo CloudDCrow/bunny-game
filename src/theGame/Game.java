@@ -100,13 +100,11 @@ public class Game extends Canvas implements Runnable{
     
     //Change Song
     public void nextSong(String song) {
-        if(this.music.getClip() != null) {
+		if(this.music.getClip() != null) {
         	this.music.stopSong();
             this.music.setSong(song);
             this.music.playSong(true);
-        } else {
-			System.err.println("Music player is not initialized or clip is null.");
-		}
+        }
     }
     
     //Game loop
